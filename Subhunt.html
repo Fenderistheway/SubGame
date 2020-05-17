@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>It's Your Fishtank</title>
+	<style>
+
+body {
+    background-color: #2D2D33FF;
+    background-size: 100%;
+    background-repeat: no-repeat;
+
+
+  }
+
+span {
+  font: 1.2vw Inconsolata, monospace;
+  color: green;
+  padding: .5vw;
+  border:1px solid #18ab29;
+  text-align: center;
+}
+
+h1 {
+  font: 2vw Inconsolata, monospace;
+  color: green;
+  padding: 1vw;
+}
+
+/* Pulse effect */
+@-webkit-keyframes pulse {
+  0% {
+      opacity: .8;
+  }
+  50% {
+      opacity: .5;
+  }
+  100% {
+      opacity: .8;
+  }
+}
+@keyframes pulse {
+  0% {
+    opacity: .8;
+  }
+  50% {
+      opacity: .5;
+  }
+  100% {
+      opacity: .8;
+  }
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
+  grid-gap: 0vw;
+  background-color: green;
+  padding: 1vw;
+  width: 60vw;
+  -webkit-transition: opacity 1s ease-in-out;
+  -moz-transition: opacity 1s ease-in-out;
+  -o-transition: opacity 1s ease-in-out;
+  transition: opacity 1s ease-in-out;
+
+}
+
+.grid-container > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  background-image: url("/Users/jeffreymorse/Desktop/Sub_Game_Assets/Watertile.PNG");
+  background-size: contain;
+  text-align: center;
+  padding: 0px 0px;
+  height: 6vw;
+  width: 6vw;
+  font-size: 3vw;
+  border-style: solid;
+  border-width: 0px;
+
+
+}
+
+.grid-container > div:hover{
+  opacity: .5;
+
+}
+
+.control-panel {
+  position: fixed;
+  top: 1vw;
+  left: 64vw;
+  bottom: 10vw;
+
+
+  background-color: #2D2D33FF;
+  height: 56vw;
+  width: 34vw;
+}
+
+.command-button-container {
+width: 40vw;
+}
+
+#move-button {
+  display: inline-block;
+  grid-gap: 0vw;
+  background-image: url("/Users/jeffreymorse/Desktop/Sub_Game_Assets/movebutton.PNG");
+  background-size: contain;
+  padding: 0vw;
+  margin-left: .5vw;
+  margin-right: .5vw;
+  height: 7vw;
+  width: 7vw;
+  font-size: 3vw;
+  border-style: solid;
+  border-width: 0px;
+}
+
+#move-button {
+  display: inline-block;
+  grid-gap: 0vw;
+  background-image: url("/Users/jeffreymorse/Desktop/Sub_Game_Assets/movebutton.PNG");
+  background-size: contain;
+  padding: 0vw;
+  margin-left: .5vw;
+  margin-right: .5vw;
+  height: 7vw;
+  width: 7vw;
+  font-size: 3vw;
+  border-style: solid;
+  border-width: 0px;
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
+ filter: drop-shadow(5px 5px 5px #222);
+}
+
+#move-button:active {
+	position:relative;
+	top:2px;
+  -webkit-filter: drop-shadow(2px 2px 2px #222);
+ filter: drop-shadow(2px 2px 2px #222);
+
+}
+
+#fire-button {
+  display: inline-block;
+  grid-gap: 0vw;
+  background-image: url("/Users/jeffreymorse/Desktop/Sub_Game_Assets/Fire.PNG");
+  background-size: contain;
+  padding: 0vw;
+  margin-left: .5vw;
+  margin-right: .5vw;
+  height: 7vw;
+  width: 7vw;
+  font-size: 3vw;
+  border-style: solid;
+  border-width: 0px;
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
+ filter: drop-shadow(5px 5px 5px #222);
+}
+
+#fire-button:active {
+	position:relative;
+	top:2px;
+  -webkit-filter: drop-shadow(2px 2px 2px #222);
+ filter: drop-shadow(2px 2px 2px #222);
+}
+
+#rise-button {
+  display: inline-block;
+  grid-gap: 0vw;
+  background-image: url("/Users/jeffreymorse/Desktop/Sub_Game_Assets/getair.PNG");
+  background-size: contain;
+  padding: 0vw;
+  margin-left: .5vw;
+  margin-right: .5vw;
+  height: 7vw;
+  width: 7vw;
+  font-size: 3vw;
+  border-style: solid;
+  border-width: 0px;
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
+ filter: drop-shadow(5px 5px 5px #222);
+}
+
+#rise-button:active {
+	position:relative;
+	top:2px;
+  -webkit-filter: drop-shadow(2px 2px 2px #222);
+ filter: drop-shadow(2px 2px 2px #222);
+}
+
+#sonar-button {
+  display: inline-block;
+  grid-gap: 0vw;
+  background-image: url("/Users/jeffreymorse/Desktop/Sub_Game_Assets/sonar.PNG");
+  background-size: contain;
+  padding: 0vw;
+  margin-left: .5vw;
+  margin-right: .5vw;
+  height: 7vw;
+  width: 7vw;
+  font-size: 3vw;
+  border-style: solid;
+  border-width: 0px;
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
+ filter: drop-shadow(5px 5px 5px #222);
+}
+
+#sonar-button:active {
+	position:relative;
+	top:2px;
+  -webkit-filter: drop-shadow(2px 2px 2px #222);
+ filter: drop-shadow(2px 2px 2px #222);
+
+}
+
+.myButton {
+	background-color:transparent;
+	border:2px solid #18ab29;
+	display:block;
+	cursor:pointer;
+	color: green;
+  font: 1.3vw Inconsolata, monospace;
+	font-size:2vw;
+	padding:1vw 1vw;
+  margin: 1vw;
+	text-decoration:none;
+}
+.myButton:hover {
+	background-color:transparent;
+}
+.myButton:active {
+	position:relative;
+	top:2px;
+  background-color: #18ab29;
+  color: black;
+}
+
+.myTextBox {
+  display: inline;
+	background-color:transparent;
+	border:2px solid #18ab29;
+  width: 80vw;
+	color: green;
+  font: 1.3vw Inconsolata, monospace;
+	font-size:2vw;
+	padding:1vw 1vw;
+  margin: 1vw;
+	text-decoration:none;
+}
+
+.mySendButton {
+  display: inline;
+	background-color:transparent;
+	border:2px solid #18ab29;
+	cursor:pointer;
+	color: green;
+  font: 1.3vw Inconsolata, monospace;
+	font-size:2vw;
+	padding:1vw 3.4vw 1vw 3.4vw;
+  width: 10vw;
+	text-decoration:none;
+}
+.mySendButton:hover {
+	background-color:transparent;
+}
+.mySendButton:active {
+	position:relative;
+	top:2px;
+  background-color: #18ab29;
+  color: black;
+}
+
+.command-screen {
+  height: 12vw;
+  width: 34.5vw;
+  border:1px solid #18ab29;
+  margin-top: .5vw;
+
+}
+
+.chat-screen {
+  height: 30vw;
+  width: 98vw;
+  border:1px solid #18ab29;
+  margin-top: .5vw;
+
+}
+
+.chat-dialog {
+  display: block;
+  height: 21vw;
+
+  border:1px solid #18ab29;
+  margin: 1vw 1vw 1vw 1vw;
+
+
+}
+
+#stats-panel {
+  text-align: center;
+}
+
+
+
+
+
+
+	</style>
+</head>
+
+<body>
+
+<div class="grid-container">
+<div id="a1" onclick="tileClick(0)"></div>
+<div id="a2" onclick="tileClick(1)"></div>
+<div id="a3" onclick="tileClick(2)"></div>
+<div id="a4" onclick="tileClick(3)"></div>
+<div id="a5" onclick="tileClick(4)"></div>
+<div id="a6" onclick="tileClick(5)"></div>
+<div id="a7" onclick="tileClick(6)"></div>
+<div id="a8" onclick="tileClick(7)"></div>
+<div id="a9" onclick="tileClick(8)"></div>
+<div id="a10" onclick="tileClick(9)"></div>
+<div id="b1" onclick="tileClick(10)"></div>
+<div id="b2" onclick="tileClick(11)"></div>
+<div id="b3" onclick="tileClick(12)"></div>
+<div id="b4" onclick="tileClick(13)"></div>
+<div id="b5" onclick="tileClick(14)"></div>
+<div id="b6" onclick="tileClick(15)"></div>
+<div id="b7" onclick="tileClick(16)"></div>
+<div id="b8" onclick="tileClick(17)"></div>
+<div id="b9" onclick="tileClick(18)"></div>
+<div id="b10" onclick="tileClick(19)"></div>
+<div id="c1" onclick="tileClick(20)"></div>
+<div id="c2" onclick="tileClick(21)"></div>
+<div id="c3" onclick="tileClick(22)"></div>
+<div id="c4" onclick="tileClick(23)"></div>
+<div id="c5" onclick="tileClick(24)"></div>
+<div id="c6" onclick="tileClick(25)"></div>
+<div id="c7" onclick="tileClick(26)"></div>
+<div id="c8" onclick="tileClick(27)"></div>
+<div id="c9" onclick="tileClick(28)"></div>
+<div id="c10" onclick="tileClick(29)"></div>
+<div id="d1" onclick="tileClick(30)"></div>
+<div id="d2" onclick="tileClick(31)"></div>
+<div id="d3" onclick="tileClick(32)"></div>
+<div id="d4" onclick="tileClick(33)"></div>
+<div id="d5" onclick="tileClick(34)"></div>
+<div id="d6" onclick="tileClick(35)"></div>
+<div id="d7" onclick="tileClick(36)"></div>
+<div id="d8" onclick="tileClick(37)"></div>
+<div id="d9" onclick="tileClick(38)"></div>
+<div id="d10" onclick="tileClick(39)"></div>
+<div id="e1" onclick="tileClick(40)"></div>
+<div id="e2" onclick="tileClick(41)"></div>
+<div id="e3" onclick="tileClick(42)"></div>
+<div id="e4" onclick="tileClick(43)"></div>
+<div id="e5" onclick="tileClick(44)"></div>
+<div id="e6" onclick="tileClick(45)"></div>
+<div id="e7" onclick="tileClick(46)"></div>
+<div id="e8" onclick="tileClick(47)"></div>
+<div id="e9" onclick="tileClick(48)"></div>
+<div id="e10" onclick="tileClick(49)"></div>
+<div id="f1" onclick="tileClick(50)"></div>
+<div id="f2" onclick="tileClick(51)"></div>
+<div id="f3" onclick="tileClick(52)"></div>
+<div id="f4" onclick="tileClick(53)"></div>
+<div id="f5" onclick="tileClick(54)"></div>
+<div id="f6" onclick="tileClick(55)"></div>
+<div id="f7" onclick="tileClick(56)"></div>
+<div id="f8" onclick="tileClick(57)"></div>
+<div id="f9" onclick="tileClick(58)"></div>
+<div id="f10" onclick="tileClick(59)"></div>
+<div id="g1" onclick="tileClick(60)"></div>
+<div id="g2" onclick="tileClick(61)"></div>
+<div id="g3" onclick="tileClick(62)"></div>
+<div id="g4" onclick="tileClick(63)"></div>
+<div id="g5" onclick="tileClick(64)"></div>
+<div id="g6" onclick="tileClick(65)"></div>
+<div id="g7" onclick="tileClick(66)"></div>
+<div id="g8" onclick="tileClick(67)"></div>
+<div id="g9" onclick="tileClick(68)"></div>
+<div id="g10" onclick="tileClick(69)"></div>
+<div id="h1" onclick="tileClick(70)"></div>
+<div id="h2" onclick="tileClick(71)"></div>
+<div id="h3" onclick="tileClick(72)"></div>
+<div id="h4" onclick="tileClick(73)"></div>
+<div id="h5" onclick="tileClick(74)"></div>
+<div id="h6" onclick="tileClick(75)"></div>
+<div id="h7" onclick="tileClick(76)"></div>
+<div id="h8" onclick="tileClick(77)"></div>
+<div id="h9" onclick="tileClick(78)"></div>
+<div id="h10" onclick="tileClick(79)"></div>
+<div id="i1" onclick="tileClick(80)"></div>
+<div id="i2" onclick="tileClick(81)"></div>
+<div id="i3" onclick="tileClick(82)"></div>
+<div id="i4" onclick="tileClick(83)"></div>
+<div id="i5" onclick="tileClick(84)"></div>
+<div id="i6" onclick="tileClick(85)"></div>
+<div id="i7" onclick="tileClick(86)"></div>
+<div id="i8" onclick="tileClick(87)"></div>
+<div id="i9" onclick="tileClick(88)"></div>
+<div id="i10" onclick="tileClick(89)"></div>
+</div>
+
+<div class="control-panel">
+  <div id="stats-panel">
+  <span id="hullNum">Hull: 100%</span>
+  <span id="oxyNum">O2: 100%</span>
+  <span id="ammoNum">Ammo: 5</span>
+  <span id="powerNum">Power: 5</span>
+  </div>
+
+  <div class="command-screen">
+    <h1 id="screen-text">This is the text that will fill the screen and give direction!</h1>
+  </div>
+  <div>
+  <h1>Sub Commands</h1>
+</div>
+
+<div class="command-button-container">
+<div href="#" id="move-button" onclick="moveSelect()"></div>
+<div href="#" id="fire-button" onclick="torpedoSelect()"></div>
+<div href="#" id="rise-button" onclick="moveSelect()"></div>
+<div href="#" id="sonar-button" onclick="moveSelect()"></div>
+</div>
+
+
+<div>
+<a href="#" class="myButton">End Turn</a>
+</div>
+
+
+</div>
+
+<div class="chat-screen">
+  <div class="chat-dialog">
+  </div>
+
+    <input class="myTextBox" type="text"></input>
+    <a href="#" class="mySendButton">Send</a>
+  </div>
+
+
+
+
+</body>
+
+
+<script>
+
+var letters = ["x","a","b","c","d","e","f","g","h","i"];
+var myCurrentPosition = ["b2"];
+var currentTileNum = 11;
+var yourTurn = true;
+var torpedoActive = false;
+var moveActive = false;
+
+var validMoves = [];
+
+var northTile = [];
+var eastTile = [];
+var southTile = [];
+var westTile = [];
+
+var surroundTileCodes = [];
+var lastPosition = [];
+
+
+var subStats = {hp: 100, maxpower: 5, currentpower: 5, ammo: 5, oxygen: 50};
+
+var tilePosition = [];
+var a1 = {name: "a1", x: 1, y: 1};
+var a2 = {name: "a2", x: 2, y: 1};
+var a3 = {name: "a3", x: 3, y: 1};
+var a4 = {name: "a4", x: 4, y: 1};
+var a5 = {name: "a5", x: 5, y: 1};
+var a6 = {name: "a6", x: 6, y: 1};
+var a7 = {name: "a7", x: 7, y: 1};
+var a8 = {name: "a8", x: 8, y: 1};
+var a9 = {name: "a9", x: 9, y: 1};
+var a10 = {name: "a10", x: 10, y: 1};
+var b1 = {name: "b1", x: 1, y: 2};
+var b2 = {name: "b2", x: 2, y: 2};
+var b3 = {name: "b3", x: 3, y: 2};
+var b4 = {name: "b4", x: 4, y: 2};
+var b5 = {name: "b5", x: 5, y: 2};
+var b6 = {name: "b6", x: 6, y: 2};
+var b7 = {name: "b7", x: 7, y: 2};
+var b8 = {name: "b8", x: 8, y: 2};
+var b9 = {name: "b9", x: 9, y: 2};
+var b10 = {name: "b10", x: 10, y: 2};
+var c1 = {name: "c1", x: 1, y: 3};
+var c2 = {name: "c2", x: 2, y: 3};
+var c3 = {name: "c3", x: 3, y: 3};
+var c4 = {name: "c4", x: 4, y: 3};
+var c5 = {name: "c5", x: 5, y: 3};
+var c6 = {name: "c6", x: 6, y: 3};
+var c7 = {name: "c7", x: 7, y: 3};
+var c8 = {name: "c8", x: 8, y: 3};
+var c9 = {name: "c9", x: 9, y: 3};
+var c10 = {name: "c10", x: 10, y: 3};
+var d1 = {name: "d1", x: 1, y: 4};
+var d2 = {name: "d2", x: 2, y: 4};
+var d3 = {name: "d3", x: 3, y: 4};
+var d4 = {name: "d4", x: 4, y: 4};
+var d5 = {name: "d5", x: 5, y: 4};
+var d6 = {name: "d6", x: 6, y: 4};
+var d7 = {name: "d7", x: 7, y: 4};
+var d8 = {name: "d8", x: 8, y: 4};
+var d9 = {name: "d9", x: 9, y: 4};
+var d10 = {name: "d10", x: 10, y: 4};
+var e1 = {name: "e1", x: 1, y: 5};
+var e2 = {name: "e2", x: 2, y: 5};
+var e3 = {name: "e3", x: 3, y: 5};
+var e4 = {name: "e4", x: 4, y: 5};
+var e5 = {name: "e5", x: 5, y: 5};
+var e6 = {name: "e6", x: 6, y: 5};
+var e7 = {name: "e7", x: 7, y: 5};
+var e8 = {name: "e8", x: 8, y: 5};
+var e9 = {name: "e9", x: 9, y: 5};
+var e10 = {name: "e10", x: 10, y: 5};
+var f1 = {name: "f1", x: 1, y: 6};
+var f2 = {name: "f2", x: 2, y: 6};
+var f3 = {name: "f3", x: 3, y: 6};
+var f4 = {name: "f4", x: 4, y: 6};
+var f5 = {name: "f5", x: 5, y: 6};
+var f6 = {name: "f6", x: 6, y: 6};
+var f7 = {name: "f7", x: 7, y: 6};
+var f8 = {name: "f8", x: 8, y: 6};
+var f9 = {name: "f9", x: 9, y: 6};
+var f10 = {name: "f10", x: 10, y: 6};
+var g1 = {name: "g1", x: 1, y: 7};
+var g2 = {name: "g2", x: 2, y: 7};
+var g3 = {name: "g3", x: 3, y: 7};
+var g4 = {name: "g4", x: 4, y: 7};
+var g5 = {name: "g5", x: 5, y: 7};
+var g6 = {name: "g6", x: 6, y: 7};
+var g7 = {name: "g7", x: 7, y: 7};
+var g8 = {name: "g8", x: 8, y: 7};
+var g9 = {name: "g9", x: 9, y: 7};
+var g10 = {name: "g10", x: 10, y: 7};
+var h1 = {name: "h1", x: 1, y: 8};
+var h2 = {name: "h2", x: 2, y: 8};
+var h3 = {name: "h3", x: 3, y: 8};
+var h4 = {name: "h4", x: 4, y: 8};
+var h5 = {name: "h5", x: 5, y: 8};
+var h6 = {name: "h6", x: 6, y: 8};
+var h7 = {name: "h7", x: 7, y: 8};
+var h8 = {name: "h8", x: 8, y: 8};
+var h9 = {name: "h9", x: 9, y: 8};
+var h10 = {name: "h10", x: 10, y: 8};
+var i1 = {name: "i1", x: 1, y: 9};
+var i2 = {name: "i2", x: 2, y: 9};
+var i3 = {name: "i3", x: 3, y: 9};
+var i4 = {name: "i4", x: 4, y: 9};
+var i5 = {name: "i5", x: 5, y: 9};
+var i6 = {name: "i6", x: 6, y: 9};
+var i7 = {name: "i7", x: 7, y: 9};
+var i8 = {name: "i8", x: 8, y: 9};
+var i9 = {name: "i9", x: 9, y: 9};
+var i10 = {name: "i10", x: 10, y: 9};
+
+tilePosition.push(a1);
+tilePosition.push(a2);
+tilePosition.push(a3);
+tilePosition.push(a4);
+tilePosition.push(a5);
+tilePosition.push(a6);
+tilePosition.push(a7);
+tilePosition.push(a8);
+tilePosition.push(a9);
+tilePosition.push(a10);
+tilePosition.push(b1);
+tilePosition.push(b2);
+tilePosition.push(b3);
+tilePosition.push(b4);
+tilePosition.push(b5);
+tilePosition.push(b6);
+tilePosition.push(b7);
+tilePosition.push(b8);
+tilePosition.push(b9);
+tilePosition.push(b10);
+tilePosition.push(c1);
+tilePosition.push(c2);
+tilePosition.push(c3);
+tilePosition.push(c4);
+tilePosition.push(c5);
+tilePosition.push(c6);
+tilePosition.push(c7);
+tilePosition.push(c8);
+tilePosition.push(c9);
+tilePosition.push(c10);
+tilePosition.push(d1);
+tilePosition.push(d2);
+tilePosition.push(d3);
+tilePosition.push(d4);
+tilePosition.push(d5);
+tilePosition.push(d6);
+tilePosition.push(d7);
+tilePosition.push(d8);
+tilePosition.push(d9);
+tilePosition.push(d10);
+tilePosition.push(e1);
+tilePosition.push(e2);
+tilePosition.push(e3);
+tilePosition.push(e4);
+tilePosition.push(e5);
+tilePosition.push(e6);
+tilePosition.push(e7);
+tilePosition.push(e8);
+tilePosition.push(e9);
+tilePosition.push(e10);
+tilePosition.push(f1);
+tilePosition.push(f2);
+tilePosition.push(f3);
+tilePosition.push(f4);
+tilePosition.push(f5);
+tilePosition.push(f6);
+tilePosition.push(f7);
+tilePosition.push(f8);
+tilePosition.push(f9);
+tilePosition.push(f10);
+tilePosition.push(g1);
+tilePosition.push(g2);
+tilePosition.push(g3);
+tilePosition.push(g4);
+tilePosition.push(g5);
+tilePosition.push(g6);
+tilePosition.push(g7);
+tilePosition.push(g8);
+tilePosition.push(g9);
+tilePosition.push(g10);
+tilePosition.push(h1);
+tilePosition.push(h2);
+tilePosition.push(h3);
+tilePosition.push(h4);
+tilePosition.push(h5);
+tilePosition.push(h6);
+tilePosition.push(h7);
+tilePosition.push(h8);
+tilePosition.push(h9);
+tilePosition.push(h10);
+tilePosition.push(i1);
+tilePosition.push(i2);
+tilePosition.push(i3);
+tilePosition.push(i4);
+tilePosition.push(i5);
+tilePosition.push(i6);
+tilePosition.push(i7);
+tilePosition.push(i8);
+tilePosition.push(i9);
+tilePosition.push(i10);
+
+// Start game
+window.onload = function startGame() {
+  document.getElementById(myCurrentPosition[0]).style.content = 'url("/Users/jeffreymorse/Desktop/Sub_Game_Assets/SubanimatedRise.GIF")';
+  setTimeout(subFloatAnimation, 1800);
+  document.getElementById("screen-text").innerHTML = "What are my orders, captain?";
+  updateStats();
+}
+
+
+//Activates tile when user clicks a water tile, and reacts based on what action is active.
+function tileClick(tileCode) {
+  //clearWater(tileCode);
+  //currentPosition[0] = tilePosition[tileCode - 1];
+  //  document.getElementById(tilePosition[tileCode]['name']).style.content = 'url("/Users/jeffreymorse/Desktop/Sub_Game_Assets/sub.png")';
+
+ if (torpedoActive == true) {
+    document.getElementById(tilePosition[tileCode]['name']).style.content = 'url("/Users/jeffreymorse/Desktop/Sub_Game_Assets/boom.GIF")';
+    torpedoActive = false;
+    subStats['ammo']--
+    subStats['currentpower'] = subStats['currentpower'] - 4;
+    updateStats();
+    document.getElementById("screen-text").innerHTML = "What are my orders, captain?";
+ } else if (moveActive == true) {
+// check if move is valid
+  if (tilePosition[tileCode]['x'] == northTile[0] && tilePosition[tileCode]['y'] == northTile[1] ||
+      tilePosition[tileCode]['x'] == eastTile[0] && tilePosition[tileCode]['y'] == eastTile[1] ||
+      tilePosition[tileCode]['x'] == southTile[0] && tilePosition[tileCode]['y'] == southTile[1]||
+      tilePosition[tileCode]['x'] == westTile[0] && tilePosition[tileCode]['y'] == westTile[1]) {
+// check which way to rotate sub
+if (tilePosition[tileCode]['x'] == northTile[0] && tilePosition[tileCode]['y'] == northTile[1]) {
+  subOrientation = "north";
+} else if (tilePosition[tileCode]['x'] == eastTile[0] && tilePosition[tileCode]['y'] == eastTile[1]) {
+  subOrientation = "east";
+} else if (tilePosition[tileCode]['x'] == southTile[0] && tilePosition[tileCode]['y'] == southTile[1]) {
+  subOrientation = "south";
+} else if (tilePosition[tileCode]['x'] == westTile[0] && tilePosition[tileCode]['y'] == westTile[1]) {
+  subOrientation = "west";
+}
+
+
+// move's sub
+    lastPosition = currentTileNum;
+    rotateSub(subOrientation, tilePosition[tileCode]['name']);
+    document.getElementById(tilePosition[currentTileNum].name).style.content = 'url("/Users/jeffreymorse/Desktop/Sub_Game_Assets/SubanimatedDive.GIF")';
+    setTimeout(loadWaterTile, 1700);
+    setTimeout(function() {document.getElementById(tilePosition[tileCode]['name']).style.content = 'url("/Users/jeffreymorse/Desktop/Sub_Game_Assets/SubanimatedRise.GIF")';}, 1700);
+    setTimeout(subFloatAnimation, 3500);
+    moveActive = false;
+    displayRangeOne(currentTileNum);
+    currentTileNum = tileCode;
+    myCurrentPosition = tilePosition[currentTileNum];
+    subStats['currentpower']--
+    updateStats();
+    document.getElementById("screen-text").innerHTML = "What are my orders, captain?";
+  }
+}
+
+}
+
+//Clears images off water tiles
+function clearWater(tileCode) {
+  for (var i = 0; i < tilePosition.length; i++) {
+    document.getElementById(tilePosition[i].name).style.content = "";
+    document.getElementById(tilePosition[i].name).style.opacity = 1;
+    document.getElementById(tilePosition[i].name).style.animation = "none";
+
+  }
+  }
+
+// highlights 1 space around sub
+function displayRangeOne(currentTileNum) {
+
+  northTile[0] = tilePosition[currentTileNum]['x'];
+  northTile[1] = tilePosition[currentTileNum]['y'] - 1;
+
+  eastTile[0] = tilePosition[currentTileNum]['x'] + 1;
+  eastTile[1] = tilePosition[currentTileNum]['y'];
+
+  southTile[0] = tilePosition[currentTileNum]['x'];
+  southTile[1] = tilePosition[currentTileNum]['y'] + 1;
+
+  westTile[0] = tilePosition[currentTileNum]['x'] - 1;
+  westTile[1] = tilePosition[currentTileNum]['y'];
+
+  var rangeOneTileNames = [];
+  rangeOneTileNames.push(letters[northTile[1]] + northTile[0]);
+  rangeOneTileNames.push(letters[eastTile[1]] + eastTile[0]);
+  rangeOneTileNames.push(letters[southTile[1]] + southTile[0]);
+  rangeOneTileNames.push(letters[westTile[1]] + westTile[0]);
+
+// turn on blinking tiles
+if (moveActive == true) {
+  if (northTile[0] > 0 && northTile[0] < 11 && northTile[1] > 0 && northTile[1] < 10) {
+      document.getElementById(rangeOneTileNames[0]).style.animation = 'pulse 1s infinite';}
+  if (eastTile[0] > 0 && eastTile[0] < 11 && eastTile[1] > 0 && eastTile[1] < 10) {
+      document.getElementById(rangeOneTileNames[1]).style.animation = 'pulse 1s infinite';}
+  if (southTile[0] > 0 && southTile[0] < 11 && southTile[1] > 0 && southTile[1] < 10) {
+      document.getElementById(rangeOneTileNames[2]).style.animation = 'pulse 1s infinite';}
+  if (westTile[0] > 0 && westTile[0] < 11 && westTile[1] > 0 && westTile[1] < 10) {
+      document.getElementById(rangeOneTileNames[3]).style.animation = 'pulse 1s infinite';}
+} else {
+// turn off blinking tiles
+  if (northTile[0] > 0 && northTile[0] < 11 && northTile[1] > 0 && northTile[1] < 10) {
+      document.getElementById(rangeOneTileNames[0]).style.animation = '';}
+  if (eastTile[0] > 0 && eastTile[0] < 11 && eastTile[1] > 0 && eastTile[1] < 10) {
+      document.getElementById(rangeOneTileNames[1]).style.animation = '';}
+  if (southTile[0] > 0 && southTile[0] < 11 && southTile[1] > 0 && southTile[1] < 10) {
+      document.getElementById(rangeOneTileNames[2]).style.animation = ''; }
+  if (westTile[0] > 0 && westTile[0] < 11 && westTile[1] > 0 && westTile[1] < 10) {
+      document.getElementById(rangeOneTileNames[3]).style.animation = '';}
+}
+
+}
+// activates when user hits move.
+function moveSelect() {
+  if (yourTurn == true && subStats['currentpower'] >= 1) {
+    moveActive = true;
+    displayRangeOne(currentTileNum);
+    document.getElementById("screen-text").innerHTML = "Where to, captain?";
+  } else {
+    document.getElementById("screen-text").innerHTML = "Not enough power, captain!";
+  }
+}
+
+
+
+// activates when user hits torpedo button
+function torpedoSelect() {
+  if (yourTurn == true && subStats['currentpower'] >= 5) {
+    torpedoActive = true;
+    document.getElementById("screen-text").innerHTML = "Captain! Where should we shoot the torpedo?";
+  } else {
+    document.getElementById("screen-text").innerHTML = "Not enough power, captain!";
+  }
+}
+
+//update sub stats on screen
+function updateStats() {
+  document.getElementById("hullNum").innerHTML = "Hull: " + subStats["hp"] + "%";
+  document.getElementById("oxyNum").innerHTML = "02: " + subStats["oxygen"] + "%";
+  document.getElementById("ammoNum").innerHTML = "Ammo: " + subStats["ammo"];
+  document.getElementById("powerNum").innerHTML = "Power: " + subStats["currentpower"];
+}
+
+//rotate sub graphic
+function rotateSub(direction, tileID) {
+if (direction == "north") {
+  document.getElementById(tileID).style.transform = 'rotate(0deg)';
+} else if (direction == "east") {
+  document.getElementById(tileID).style.transform = 'rotate(90deg)';
+} else if (direction == "south") {
+  document.getElementById(tileID).style.transform = 'rotate(180deg)';
+} else if (direction == "west") {
+  document.getElementById(tileID).style.transform = 'rotate(270deg)';
+}
+}
+
+function subFloatAnimation() {
+  document.getElementById(tilePosition[currentTileNum].name).style.content = 'url("/Users/jeffreymorse/Desktop/Sub_Game_Assets/sub.GIF")';
+}
+
+function loadWaterTile() {
+  document.getElementById(tilePosition[lastPosition].name).style.content = 'url("/Users/jeffreymorse/Desktop/Sub_Game_Assets/WaterTile.PNG"';
+  document.getElementById(tilePosition[lastPosition].name).style.transform = 'rotate(0deg)';
+}
+
+
+
+</script>
+</html>
