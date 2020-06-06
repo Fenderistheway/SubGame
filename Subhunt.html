@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>It's Your Fishtank</title>
+    <title>Battle Subs</title>
+    <link rel="icon" type="image/png" href="https://github.com/Fenderistheway/SubGame/blob/master/Favicon.PNG?raw=true">
 	<style>
 
 body {
+    cursor: url("https://github.com/Fenderistheway/SubGame/blob/master/Cursor1.PNG?raw=true"), pointer;
     background-color: #2D2D33FF;
     background-size: 100%;
     background-repeat: no-repeat;
-
-
   }
 
 span {
   font: 1.2vw Inconsolata, monospace;
   color: green;
-  padding: .5vw;
-  border:1px solid #18ab29;
-  text-align: center;
+
 }
 
 h1 {
   font: 2vw Inconsolata, monospace;
   color: green;
   padding: 1vw;
+}
+
+ul {
+ list-style-type: none;
+}
+
+li {
+  font: 2vw Inconsolata, monospace;
+  color: green;
 }
 
 /* Pulse effect */
@@ -50,13 +57,41 @@ h1 {
   }
 }
 
+/* Sonar pulse effect */
+@-webkit-keyframes sonarPulse {
+  0% {
+      opacity: 1;
+  }
+  50% {
+      opacity: .5;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+@keyframes sonarPulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+      opacity: .5;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+
 .grid-container {
   display: grid;
+  background-image: url("https://github.com/Fenderistheway/SubGame/blob/master/Gameboardborder.PNG?raw=true");
+  background-size: cover;
+  background-repeat: no-repeat;
   grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
   grid-gap: 0vw;
   background-color: green;
   padding: 1vw;
   width: 60vw;
+  height: 53.9vw;
   -webkit-transition: opacity 1s ease-in-out;
   -moz-transition: opacity 1s ease-in-out;
   -o-transition: opacity 1s ease-in-out;
@@ -85,23 +120,85 @@ h1 {
 }
 
 .control-panel {
-  position: fixed;
+  position: absolute;
   top: 1vw;
   left: 64vw;
   bottom: 10vw;
-
-
   background-color: #2D2D33FF;
   height: 56vw;
-  width: 34vw;
+  width: 36vw;
+}
+
+#hullNum {
+  display: inline-block;
+  background-image: url("https://github.com/Fenderistheway/SubGame/blob/master/Hull.PNG?raw=true");
+  background-size:contain;
+  background-repeat: no-repeat;
+  width: 8vw;
+  height: 4vw;
+  line-height: 3.8vw;
+  margin-right: 0vw;
+  text-indent: 4vw;
+
+}
+
+#oxyNum {
+  display: inline-block;
+  background-image: url("https://github.com/Fenderistheway/SubGame/blob/master/O2.PNG?raw=true");
+  background-size:contain;
+  background-repeat: no-repeat;
+  width: 8vw;
+  height: 4vw;
+  line-height: 3.8vw;
+  padding-left: 0vw;
+  text-indent: 4vw;
+}
+
+#ammoNum {
+  display: inline-block;
+  background-image: url("https://github.com/Fenderistheway/SubGame/blob/master/Ammo.PNG?raw=true");
+  background-size:contain;
+  background-repeat: no-repeat;
+  width: 8vw;
+  height: 4vw;
+  line-height: 3.8vw;
+  padding-left: 0vw;
+  text-indent: 3.7vw;
+  font-size: 1.5vw;
+}
+
+#powerNum {
+  display: inline-block;
+  background-image: url("https://github.com/Fenderistheway/SubGame/blob/master/Power.PNG?raw=true");
+  background-size:contain;
+  background-repeat: no-repeat;
+  width: 8vw;
+  height: 4vw;
+
+  line-height: 3.8vw;
+  padding-left: 0vw;
+  text-indent: 3.7vw;
+    font-size: 1.5vw;
 }
 
 .command-button-container {
 width: 40vw;
 }
 
+#command-label {
+  display: block;
+  background-image: url("https://github.com/Fenderistheway/SubGame/blob/master/Commandlabel.PNG?raw=true");
+  background-size:contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 20vw;
+  height: 4vw;
+  margin: 1vw;
+  margin-left: 6.4vw;
+}
 
 #move-button {
+  cursor: url("https://github.com/Fenderistheway/SubGame/blob/master/Cursortwo.PNG?raw=true") 16 16, pointer;
   display: inline-block;
   grid-gap: 0vw;
   background-image: url("https://github.com/Fenderistheway/SubGame/blob/master/MoveButton.PNG?raw=true");
@@ -127,6 +224,7 @@ width: 40vw;
 }
 
 #fire-button {
+  cursor: url("https://github.com/Fenderistheway/SubGame/blob/master/Cursortwo.PNG?raw=true") 16 16, pointer;
   display: inline-block;
   grid-gap: 0vw;
   background-image: url("https://github.com/Fenderistheway/SubGame/blob/master/Fire.PNG?raw=true");
@@ -151,6 +249,7 @@ width: 40vw;
 }
 
 #rise-button {
+  cursor: url("https://github.com/Fenderistheway/SubGame/blob/master/Cursortwo.PNG?raw=true") 16 16, pointer;
   display: inline-block;
   grid-gap: 0vw;
   background-image: url("https://github.com/Fenderistheway/SubGame/blob/master/Getair.PNG?raw=true");
@@ -175,6 +274,7 @@ width: 40vw;
 }
 
 #sonar-button {
+  cursor: url("https://github.com/Fenderistheway/SubGame/blob/master/Cursortwo.PNG?raw=true") 16 16, pointer;
   display: inline-block;
   grid-gap: 0vw;
   background-image: url("https://github.com/Fenderistheway/SubGame/blob/master/Sonar.PNG?raw=true");
@@ -199,6 +299,10 @@ width: 40vw;
 
 }
 
+#start-game-button {
+  display: none;
+}
+
 .myButton {
 	background-color:transparent;
 	border:2px solid #18ab29;
@@ -212,6 +316,7 @@ width: 40vw;
 	text-decoration:none;
 }
 .myButton:hover {
+    cursor: url("https://github.com/Fenderistheway/SubGame/blob/master/Cursortwo.PNG?raw=true") 16 16, pointer;
 	background-color:transparent;
 }
 .myButton:active {
@@ -257,11 +362,21 @@ width: 40vw;
 }
 
 .command-screen {
-  height: 12vw;
-  width: 34.5vw;
-  border:1px solid #18ab29;
+  background-color: #2D2D33FF;
+  background-image: url("https://github.com/Fenderistheway/SubGame/blob/master/Screen.PNG?raw=true");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 20vw;
+  width: 33.3vw;
   margin-top: .5vw;
+  background-color: black;
 
+
+}
+
+#screen-text {
+    text-align: center;
+    padding-top: 7vw;
 }
 
 .chat-screen {
@@ -272,10 +387,12 @@ width: 40vw;
 
 }
 
+
+
 .chat-dialog {
   display: block;
   height: 21vw;
-
+  overflow-y: scroll;
   border:1px solid #18ab29;
   margin: 1vw 1vw 1vw 1vw;
 
@@ -284,9 +401,40 @@ width: 40vw;
 
 #stats-panel {
   text-align: center;
+  height: auto;
+  padding: 0vw;
+  font: 1.2vw monospace;
+  color: white;
+
 }
 
+#whole-game-screen {
+  display: none;
+}
 
+#waiting-screen {
+  display: none;
+}
+/*stops screen from growing at a certain resolution
+@media only screen and (min-width: 1000px) {
+  #whole-game-screen {
+    width: 1000px;
+    height: 1000px;
+  }
+  .grid-container {
+    width: 600px;
+    height: 539px;;
+  }
+
+  .grid-container > div {
+    width: 60px;
+    height: 60px;
+    padding: 0px;
+
+  }
+
+}
+*/
 
 
 
@@ -295,6 +443,20 @@ width: 40vw;
 </head>
 
 <body>
+<div id="login-screen">
+  <h1>Battle Subs</h1>
+  <h1>What's your name?!</h1>
+  <input type="text" id="usernameEntry"></input>
+  <button type="button" onclick="activateWaitingScreen()">Submit</button>
+</div>
+
+<div id="waiting-screen">
+  <h1 id="searchingForOp">Searching for opponent...</h1>
+  <button type="button" onclick="startGame()" id="start-game-button">Start Mission</button>
+</div>
+
+
+<div id="whole-game-screen">
 
 <div class="grid-container">
 <div id="a1" onclick="tileClick(0)"></div>
@@ -391,66 +553,176 @@ width: 40vw;
 
 <div class="control-panel">
   <div id="stats-panel">
-  <span id="hullNum">Hull: 100%</span>
-  <span id="oxyNum">O2: 100%</span>
-  <span id="ammoNum">Ammo: 5</span>
-  <span id="powerNum">Power: 5</span>
+  <div id="hullNum">100%</div>
+  <div id="oxyNum">100%</div>
+  <div id="ammoNum">5</div>
+  <div id="powerNum">5</div>
   </div>
 
   <div class="command-screen">
     <h1 id="screen-text">This is the text that will fill the screen and give direction!</h1>
   </div>
   <div>
-  <h1>Sub Commands</h1>
+  <div id="command-label"></div>
 </div>
 
 <div class="command-button-container">
 <div href="#" id="move-button" onclick="moveSelect()"></div>
 <div href="#" id="fire-button" onclick="torpedoSelect()"></div>
 <div href="#" id="rise-button" onclick="moveSelect()"></div>
-<div href="#" id="sonar-button" onclick="moveSelect()"></div>
+<div href="#" id="sonar-button" onclick="sonarSelect()"></div>
 </div>
 
 
 <div>
-<a href="#" class="myButton">End Turn</a>
+<a href="#" class="myButton" id="end-button" onclick="endTurn()">End Turn</a>
 </div>
 
 
 </div>
 
 <div class="chat-screen">
-  <div class="chat-dialog">
+  <div class="chat-dialog" id="chat-dialog">
+    <ul id="messages"></ul>
   </div>
 
-    <input class="myTextBox" type="text"></input>
-    <a href="#" class="mySendButton">Send</a>
+    <input class="myTextBox" id="message-box" autocomplete="off" type="text"></input>
+    <a href="#" class="mySendButton" id="sendButton">Send</a>
   </div>
 
+</div>
 
-
-
-</body>
-
+<script src="/socket.io/socket.io.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 
 <script>
+  var socket = io.connect('http://localhost:3000');
+
+  var username;
+  var mySocketId;
+  var myOppSocketId;
+
+  var roomNumber;
+
+  var playerNumber;
+
+
+     // The visitor is asked for their username...
+     //var uname = prompt('What\'s your name, captain?');
+
+     // It's sent with the signal "little_newbie" (to differentiate it from "message")
+     //socket.emit('little_newbie', uname);
+
+
+
+     socket.on('opponentFound', function() {
+       opponentFound = true;
+       document.getElementById('searchingForOp').innerHTML = "Opponent found!";
+       document.getElementById('start-game-button').style.display = "block";
+     });
+
+
+//Get room number and store it.
+     socket.on('connectToRoom',function(data) {
+         roomNumber = data;
+      //   alert("connected to room #" + roomNumber);
+      });
+
+//Get whether you're first player or second.
+      socket.on('playerOne', function() {
+          playerNumber = 1;
+          alert("I'm player #" + playerNumber);
+       });
+       socket.on('playerTwo', function() {
+           playerNumber = 2;
+           alert("I'm player #" + playerNumber);
+        });
+
+            socket.emit('getGameState');
+
+
+     function endTurn() {
+      socket.emit('currentPosition' , currentTileNum);
+     }
+
+
+     // When the button is clicked, a "message" is sent to the server
+     $('#sendButton').click(function () {
+      //  socket.emit('message' , $('#message-box').val());
+        socket.emit('message' , {msg: $('#message-box').val(), roomno: roomNumber});
+          $('#message-box').val('');
+          return false;
+        });
+
+        //Message is received
+        socket.on('message', function(message, uname){
+          $('#messages').append($('<li>').text(message.sender + ": " + message.msg));
+          $("#chat-dialog").animate({
+            scrollTop: $('#chat-dialog')[0].scrollHeight - $('#chat-dialog')[0].clientHeight
+          }, 500);
+  });
+
+  function activateWaitingScreen() {
+    username =  $("#usernameEntry").val();
+    socket.emit('little_newbie', username);
+
+    //Retrieves socket ID
+    socket.emit('getId');
+    socket.on('userId', function(myIdNum) {
+    mySocketId = myIdNum;
+    });
+
+    //Tells server that a new player has joined.
+    socket.emit('newPlayer');
+
+    //closes username entry screen and opens waiting screen
+    document.getElementById("usernameEntry").style.display = "none";
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("waiting-screen").style.display = "block";
+  }
+
+  //get opponent socket ID
+  socket.emit('getOppId');
+  socket.on('userId', function(myOppIdNum) {
+  myOppSocketId = myOppIdNum;
+  });
+
+
+
+
 
 var letters = ["x","a","b","c","d","e","f","g","h","i"];
-var myCurrentPosition = ["b2"];
-var currentTileNum = 11;
+var myCurrentPosition = ["c3"];
+var currentTileNum = 22;
 var yourTurn = true;
 var torpedoActive = false;
 var moveActive = false;
 
+var username;
+
 var validMoves = [];
 
 var northTile = [];
+var northTileTwo = [];
+var northEastTile = [];
 var eastTile = [];
+var eastTileTwo = [];
+var southEastTile = [];
 var southTile = [];
+var southTileTwo = [];
+var southWestTile = [];
 var westTile = [];
+var westTileTwo = [];
+var northWestTile = [];
 
 var surroundTileCodes = [];
 var lastPosition = [];
+
+var rangeSonarTileNames = [];
+
+var firstPlayer = true;
+
+var opponentFound = false;
 
 
 var subStats = {hp: 100, maxpower: 5, currentpower: 5, ammo: 5, oxygen: 50};
@@ -639,9 +911,17 @@ tilePosition.push(i9);
 tilePosition.push(i10);
 
 // Start game
-window.onload = function startGame() {
-  document.getElementById(myCurrentPosition[0]).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/SubanimatedRise.GIF?raw=true")';
-  setTimeout(subFloatAnimation, 1800);
+function startGame() {
+  document.getElementById("whole-game-screen").style.display = "block";
+  document.getElementById("waiting-screen").style.display = "none";
+if (firstPlayer == true) {
+  currentTileNum = randomInteger(0, 39);
+} else {
+  currentTileNum = randomInteger(50, 89);
+}
+  myCurrentPosition[0] = tilePosition[currentTileNum].name;
+  document.getElementById(myCurrentPosition[0]).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/SubanimatedSubmergerdrise.GIF?raw=true")';
+  setTimeout(subIdleAnimation, 2000);
   document.getElementById("screen-text").innerHTML = "What are my orders, captain?";
   updateStats();
 }
@@ -681,10 +961,10 @@ if (tilePosition[tileCode]['x'] == northTile[0] && tilePosition[tileCode]['y'] =
 // move's sub
     lastPosition = currentTileNum;
     rotateSub(subOrientation, tilePosition[tileCode]['name']);
-    document.getElementById(tilePosition[currentTileNum].name).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/SubanimatedDive.GIF?raw=true")';
+    document.getElementById(tilePosition[currentTileNum].name).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/SubanimatedSubmergeding.GIF?raw=true")';
     setTimeout(loadWaterTile, 1700);
-    setTimeout(function() {document.getElementById(tilePosition[tileCode]['name']).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/SubanimatedRise.GIF?raw=true")';}, 1700);
-    setTimeout(subFloatAnimation, 3500);
+    setTimeout(function() {document.getElementById(tilePosition[tileCode]['name']).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/SubanimatedSubmergerdrise.GIF?raw=true")';}, 1700);
+    setTimeout(subIdleAnimation, 3500);
     moveActive = false;
     displayRangeOne(currentTileNum);
     currentTileNum = tileCode;
@@ -703,7 +983,6 @@ function clearWater(tileCode) {
     document.getElementById(tilePosition[i].name).style.content = "";
     document.getElementById(tilePosition[i].name).style.opacity = 1;
     document.getElementById(tilePosition[i].name).style.animation = "none";
-
   }
   }
 
@@ -751,6 +1030,90 @@ if (moveActive == true) {
 }
 
 }
+
+
+// highlights 1 space around sub
+function displayRangeSonar(currentTileNum) {
+
+  northTile[0] = tilePosition[currentTileNum]['x'];
+  northTile[1] = tilePosition[currentTileNum]['y'] - 1;
+
+  northTileTwo[0] = tilePosition[currentTileNum]['x'];
+  northTileTwo[1] = tilePosition[currentTileNum]['y'] - 2;
+
+  northEastTile[0] = tilePosition[currentTileNum]['x'] + 1;
+  northEastTile[1] = tilePosition[currentTileNum]['y'] - 1;
+
+  eastTile[0] = tilePosition[currentTileNum]['x'] + 1;
+  eastTile[1] = tilePosition[currentTileNum]['y'];
+
+  eastTileTwo[0] = tilePosition[currentTileNum]['x'] + 2;
+  eastTileTwo[1] = tilePosition[currentTileNum]['y'];
+
+  southEastTile[0] = tilePosition[currentTileNum]['x'] + 1;
+  southEastTile[1] = tilePosition[currentTileNum]['y'] + 1;
+
+  southTile[0] = tilePosition[currentTileNum]['x'];
+  southTile[1] = tilePosition[currentTileNum]['y'] + 1;
+
+  southTileTwo[0] = tilePosition[currentTileNum]['x'];
+  southTileTwo[1] = tilePosition[currentTileNum]['y'] + 2;
+
+  southWestTile[0] = tilePosition[currentTileNum]['x'] - 1;
+  southWestTile[1] = tilePosition[currentTileNum]['y'] + 1;
+
+  westTile[0] = tilePosition[currentTileNum]['x'] - 1;
+  westTile[1] = tilePosition[currentTileNum]['y'];
+
+  westTileTwo[0] = tilePosition[currentTileNum]['x'] - 2;
+  westTileTwo[1] = tilePosition[currentTileNum]['y'];
+
+  northWestTile[0] = tilePosition[currentTileNum]['x'] - 1;
+  northWestTile[1] = tilePosition[currentTileNum]['y'] - 1;
+
+  rangeSonarTileNames = [];
+  rangeSonarTileNames.push(letters[northTile[1]] + northTile[0]);
+  rangeSonarTileNames.push(letters[northTileTwo[1]] + northTileTwo[0]);
+  rangeSonarTileNames.push(letters[northEastTile[1]] + northEastTile[0]);
+  rangeSonarTileNames.push(letters[eastTile[1]] + eastTile[0]);
+  rangeSonarTileNames.push(letters[eastTileTwo[1]] + eastTileTwo[0]);
+  rangeSonarTileNames.push(letters[southEastTile[1]] + southEastTile[0]);
+  rangeSonarTileNames.push(letters[southTile[1]] + southTile[0]);
+  rangeSonarTileNames.push(letters[southTileTwo[1]] + southTileTwo[0]);
+  rangeSonarTileNames.push(letters[southWestTile[1]] + southWestTile[0]);
+  rangeSonarTileNames.push(letters[westTile[1]] + westTile[0]);
+  rangeSonarTileNames.push(letters[westTileTwo[1]] + westTileTwo[0]);
+  rangeSonarTileNames.push(letters[northWestTile[1]] + northWestTile[0]);
+
+// turn on blinking tiles (lowers and raises opasity)
+  if (northTile[0] > 0 && northTile[0] < 11 && northTile[1] > 0 && northTile[1] < 10) {
+      document.getElementById(rangeSonarTileNames[0]).style.animation = 'sonarPulse 3s infinite';}
+  if (northTileTwo[0] > 0 && northTileTwo[0] < 11 && northTileTwo[1] > 0 && northTileTwo[1] < 10) {
+      document.getElementById(rangeSonarTileNames[1]).style.animation = 'sonarPulse 3s infinite';}
+  if (northEastTile[0] > 0 && northEastTile[0] < 11 && northEastTile[1] > 0 && northEastTile[1] < 10) {
+      document.getElementById(rangeSonarTileNames[2]).style.animation = 'sonarPulse 3s infinite';}
+  if (eastTile[0] > 0 && eastTile[0] < 11 && eastTile[1] > 0 && eastTile[1] < 10) {
+      document.getElementById(rangeSonarTileNames[3]).style.animation = 'sonarPulse 3s infinite';}
+  if (eastTileTwo[0] > 0 && eastTileTwo[0] < 11 && eastTileTwo[1] > 0 && eastTileTwo[1] < 10) {
+      document.getElementById(rangeSonarTileNames[4]).style.animation = 'sonarPulse 3s infinite';}
+  if (southEastTile[0] > 0 && southEastTile[0] < 11 && southEastTile[1] > 0 && southEastTile[1] < 10) {
+      document.getElementById(rangeSonarTileNames[5]).style.animation = 'sonarPulse 3s infinite';}
+  if (southTile[0] > 0 && southTile[0] < 11 && southTile[1] > 0 && southTile[1] < 10) {
+      document.getElementById(rangeSonarTileNames[6]).style.animation = 'sonarPulse 3s infinite';}
+  if (southTileTwo[0] > 0 && southTileTwo[0] < 11 && southTileTwo[1] > 0 && southTileTwo[1] < 10) {
+      document.getElementById(rangeSonarTileNames[7]).style.animation = 'sonarPulse 3s infinite';}
+  if (southWestTile[0] > 0 && southWestTile[0] < 11 && southWestTile[1] > 0 && southWestTile[1] < 10) {
+      document.getElementById(rangeSonarTileNames[8]).style.animation = 'sonarPulse 3s infinite';}
+  if (westTile[0] > 0 && westTile[0] < 11 && westTile[1] > 0 && westTile[1] < 10) {
+      document.getElementById(rangeSonarTileNames[9]).style.animation = 'sonarPulse 3s infinite';}
+  if (westTileTwo[0] > 0 && westTileTwo[0] < 11 && westTileTwo[1] > 0 && westTileTwo[1] < 10) {
+      document.getElementById(rangeSonarTileNames[10]).style.animation = 'sonarPulse 3s infinite';}
+  if (northWestTile[0] > 0 && northWestTile[0] < 11 && northWestTile[1] > 0 && northWestTile[1] < 10) {
+      document.getElementById(rangeSonarTileNames[11]).style.animation = 'sonarPulse 3s infinite';}
+
+      setTimeout(turnOffSonar, 6000)
+
+}
 // activates when user hits move.
 function moveSelect() {
   if (yourTurn == true && subStats['currentpower'] >= 1) {
@@ -762,8 +1125,6 @@ function moveSelect() {
   }
 }
 
-
-
 // activates when user hits torpedo button
 function torpedoSelect() {
   if (yourTurn == true && subStats['currentpower'] >= 5) {
@@ -774,12 +1135,23 @@ function torpedoSelect() {
   }
 }
 
+function sonarSelect() {
+if (yourTurn == true && subStats['currentpower'] >= 2) {
+subStats['currentpower'] = subStats['currentpower'] - 2;
+displayRangeSonar(currentTileNum);
+updateStats();
+document.getElementById("screen-text").innerHTML = "Sonar activated! Scanning...";
+} else {
+  document.getElementById("screen-text").innerHTML = "Not enough power, captain!";
+}
+}
+
 //update sub stats on screen
 function updateStats() {
-  document.getElementById("hullNum").innerHTML = "Hull: " + subStats["hp"] + "%";
-  document.getElementById("oxyNum").innerHTML = "02: " + subStats["oxygen"] + "%";
-  document.getElementById("ammoNum").innerHTML = "Ammo: " + subStats["ammo"];
-  document.getElementById("powerNum").innerHTML = "Power: " + subStats["currentpower"];
+  document.getElementById("hullNum").innerHTML = subStats["hp"] + "%";
+  document.getElementById("oxyNum").innerHTML = subStats["oxygen"] + "%";
+  document.getElementById("ammoNum").innerHTML = subStats["ammo"];
+  document.getElementById("powerNum").innerHTML = subStats["currentpower"];
 }
 
 //rotate sub graphic
@@ -799,12 +1171,52 @@ function subFloatAnimation() {
   document.getElementById(tilePosition[currentTileNum].name).style.content = 'url(https://github.com/Fenderistheway/SubGame/blob/master/Sub.GIF?raw=true)';
 }
 
+function subIdleAnimation() {
+  document.getElementById(tilePosition[currentTileNum].name).style.content = 'url(https://github.com/Fenderistheway/SubGame/blob/master/SubanimatedSubmergerdstill.PNG?raw=true)';
+}
+
+function turnOffSonar() {
+  if (northTile[0] > 0 && northTile[0] < 11 && northTile[1] > 0 && northTile[1] < 10) {
+      document.getElementById(rangeSonarTileNames[0]).style.animation = '';}
+  if (northTileTwo[0] > 0 && northTileTwo[0] < 11 && northTileTwo[1] > 0 && northTileTwo[1] < 10) {
+      document.getElementById(rangeSonarTileNames[1]).style.animation = '';}
+  if (northEastTile[0] > 0 && northEastTile[0] < 11 && northEastTile[1] > 0 && northEastTile[1] < 10) {
+      document.getElementById(rangeSonarTileNames[2]).style.animation = '';}
+  if (eastTile[0] > 0 && eastTile[0] < 11 && eastTile[1] > 0 && eastTile[1] < 10) {
+      document.getElementById(rangeSonarTileNames[3]).style.animation = '';}
+  if (eastTileTwo[0] > 0 && eastTileTwo[0] < 11 && eastTileTwo[1] > 0 && eastTileTwo[1] < 10) {
+      document.getElementById(rangeSonarTileNames[4]).style.animation = '';}
+  if (southEastTile[0] > 0 && southEastTile[0] < 11 && southEastTile[1] > 0 && southEastTile[1] < 10) {
+      document.getElementById(rangeSonarTileNames[5]).style.animation = '';}
+  if (southTile[0] > 0 && southTile[0] < 11 && southTile[1] > 0 && southTile[1] < 10) {
+      document.getElementById(rangeSonarTileNames[6]).style.animation = '';}
+  if (southTileTwo[0] > 0 && southTileTwo[0] < 11 && southTileTwo[1] > 0 && southTileTwo[1] < 10) {
+      document.getElementById(rangeSonarTileNames[7]).style.animation = '';}
+  if (southWestTile[0] > 0 && southWestTile[0] < 11 && southWestTile[1] > 0 && southWestTile[1] < 10) {
+      document.getElementById(rangeSonarTileNames[8]).style.animation = '';}
+  if (westTile[0] > 0 && westTile[0] < 11 && westTile[1] > 0 && westTile[1] < 10) {
+      document.getElementById(rangeSonarTileNames[9]).style.animation = '';}
+  if (westTileTwo[0] > 0 && westTileTwo[0] < 11 && westTileTwo[1] > 0 && westTileTwo[1] < 10) {
+      document.getElementById(rangeSonarTileNames[10]).style.animation = '';}
+  if (northWestTile[0] > 0 && northWestTile[0] < 11 && northWestTile[1] > 0 && northWestTile[1] < 10) {
+      document.getElementById(rangeSonarTileNames[11]).style.animation = '';}
+}
+
 function loadWaterTile() {
   document.getElementById(tilePosition[lastPosition].name).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/WaterTile.PNG?raw=true")';
   document.getElementById(tilePosition[lastPosition].name).style.transform = 'rotate(0deg)';
 }
 
+//Generate random number
+function randomInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+
 
 
 </script>
+
+</body>
 </html>
