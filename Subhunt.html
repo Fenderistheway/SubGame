@@ -415,6 +415,30 @@ width: 40vw;
 #waiting-screen {
   display: none;
 }
+
+#popup-modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 30vw; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 27vw; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+#modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  text-align: center;
+  padding: 5vw;
+  border: 1px solid #888;
+  width: 50vw;
+}
+
 /*stops screen from growing at a certain resolution
 @media only screen and (min-width: 1000px) {
   #whole-game-screen {
@@ -453,6 +477,12 @@ width: 40vw;
 <div id="waiting-screen">
   <h1 id="searchingForOp">Searching for opponent...</h1>
   <button type="button" onclick="startGame()" id="start-game-button">Start Mission</button>
+</div>
+
+<div id="popup-modal">
+  <div id="modal-content">
+    <h1 id="modal-message">Testing!</h1>
+  </div>
 </div>
 
 
@@ -604,16 +634,12 @@ width: 40vw;
 
   var roomNumber;
 
-  var playerNumber;
+  var playerNum;
+
+  var currentGameState;
 
 
-     // The visitor is asked for their username...
-     //var uname = prompt('What\'s your name, captain?');
-
-     // It's sent with the signal "little_newbie" (to differentiate it from "message")
-     //socket.emit('little_newbie', uname);
-
-
+playerNumber();
 
      socket.on('opponentFound', function() {
        opponentFound = true;
@@ -628,22 +654,60 @@ width: 40vw;
       //   alert("connected to room #" + roomNumber);
       });
 
-//Get whether you're first player or second.
+/*Get whether you're first player or second.
       socket.on('playerOne', function() {
           playerNumber = 1;
-          alert("I'm player #" + playerNumber);
        });
        socket.on('playerTwo', function() {
            playerNumber = 2;
-           alert("I'm player #" + playerNumber);
         });
 
-            socket.emit('getGameState');
+*/
+
+//Get player number
+function playerNumber() {
+    socket.emit('playerNumber', roomNumber);
+    socket.on('pNum', function(pNum) {
+    firstPlayer = pNum;
+    if (firstPlayer == true) {
+      playerNum = 1;
+      //alert("player Num is " + firstPlayer);
+    } else if (firstPlayer == false) {
+      playerNum = 2;
+      //alert("player Num is " + firstPlayer);
+    }
+
+     });
+
+    };
 
 
+//Get current Game State and update player stats on screen
+function getGameState() {
+      socket.emit('getCurrentGameState', roomNumber);
+      socket.on('gState', function(gState) {
+            currentGameState = gState;
+            updateStats();
+
+             });
+
+           };
+
+//Send end of player turn to server
      function endTurn() {
+      socket.emit('endTurn' , {fPlayer: firstPlayer, roomno: roomNumber});
       socket.emit('currentPosition' , currentTileNum);
+      subStats['currentpower'] = subStats['maxpower'];
      }
+//Recieve that player ended turn
+     socket.on('nextTurn', function() {
+     getGameState();
+     if (gameOver()) {
+       gameOver()
+     } else {
+       setTimeout(turnOnModal, 500);
+     }
+     });
 
 
      // When the button is clicked, a "message" is sent to the server
@@ -663,6 +727,8 @@ width: 40vw;
   });
 
   function activateWaitingScreen() {
+    getGameState();
+  //  playerNumber();
     username =  $("#usernameEntry").val();
     socket.emit('little_newbie', username);
 
@@ -914,11 +980,17 @@ tilePosition.push(i10);
 function startGame() {
   document.getElementById("whole-game-screen").style.display = "block";
   document.getElementById("waiting-screen").style.display = "none";
+  //playerNumber();
+  //alert(playerNum);
+  setTimeout(turnOnModal, 1000);
+
+
 if (firstPlayer == true) {
-  currentTileNum = randomInteger(0, 39);
-} else {
-  currentTileNum = randomInteger(50, 89);
+  currentTileNum = currentGameState.playerOnePosition;
+} else if (firstPlayer == false) {
+  currentTileNum = currentGameState.playerTwoPosition;
 }
+
   myCurrentPosition[0] = tilePosition[currentTileNum].name;
   document.getElementById(myCurrentPosition[0]).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/SubanimatedSubmergerdrise.GIF?raw=true")';
   setTimeout(subIdleAnimation, 2000);
@@ -934,12 +1006,16 @@ function tileClick(tileCode) {
   //  document.getElementById(tilePosition[tileCode]['name']).style.content = 'url("/Users/jeffreymorse/Desktop/Sub_Game_Assets/sub.png")';
 
  if (torpedoActive == true) {
+   //Send torpedo shot positon to server
+    socket.emit('torpedoPos' , {fPlayer: firstPlayer, roomno: roomNumber, tileNum: tileCode});
+  //Display torpedo explosion
     document.getElementById(tilePosition[tileCode]['name']).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/Boom.GIF?raw=true")';
     torpedoActive = false;
     subStats['ammo']--
     subStats['currentpower'] = subStats['currentpower'] - 4;
-    updateStats();
+    getGameState();
     document.getElementById("screen-text").innerHTML = "What are my orders, captain?";
+
  } else if (moveActive == true) {
 // check if move is valid
   if (tilePosition[tileCode]['x'] == northTile[0] && tilePosition[tileCode]['y'] == northTile[1] ||
@@ -968,9 +1044,12 @@ if (tilePosition[tileCode]['x'] == northTile[0] && tilePosition[tileCode]['y'] =
     moveActive = false;
     displayRangeOne(currentTileNum);
     currentTileNum = tileCode;
+//send new position to server
+    socket.emit('currentPos' , {fPlayer: firstPlayer, roomno: roomNumber, tileNum: currentTileNum});
+
     myCurrentPosition = tilePosition[currentTileNum];
     subStats['currentpower']--
-    updateStats();
+    getGameState();
     document.getElementById("screen-text").innerHTML = "What are my orders, captain?";
   }
 }
@@ -1148,10 +1227,19 @@ document.getElementById("screen-text").innerHTML = "Sonar activated! Scanning...
 
 //update sub stats on screen
 function updateStats() {
-  document.getElementById("hullNum").innerHTML = subStats["hp"] + "%";
-  document.getElementById("oxyNum").innerHTML = subStats["oxygen"] + "%";
-  document.getElementById("ammoNum").innerHTML = subStats["ammo"];
-  document.getElementById("powerNum").innerHTML = subStats["currentpower"];
+
+  if (firstPlayer == true) {
+  document.getElementById("hullNum").innerHTML = currentGameState.playerOneHp + "%";
+  document.getElementById("oxyNum").innerHTML = currentGameState.playerOneOxygen + "%";
+  document.getElementById("ammoNum").innerHTML = currentGameState.playerOneAmmo;
+  document.getElementById("powerNum").innerHTML = currentGameState.playerOneCurrentPower;
+} else if(firstPlayer == false) {
+  document.getElementById("hullNum").innerHTML = currentGameState.playerTwoHp + "%";
+  document.getElementById("oxyNum").innerHTML = currentGameState.playerTwoOxygen + "%";
+  document.getElementById("ammoNum").innerHTML = currentGameState.playerTwoAmmo;
+  document.getElementById("powerNum").innerHTML = currentGameState.playerTwoCurrentPower;
+}
+
 }
 
 //rotate sub graphic
@@ -1212,8 +1300,37 @@ function randomInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+//check who's turn it is and displays modal
+function turnOnModal() {
+  if (currentGameState.activePlayer != playerNum) {
+    document.getElementById("popup-modal").style.display = "block";
+    document.getElementById("modal-message").innerHTML = "Waiting for opponent to play..."
+  } else {
+    document.getElementById("popup-modal").style.display = "none";
+  }
+}
 
+function gameOver() {
+  if (currentGameState.playerOneHp == 0) {
+    document.getElementById("popup-modal").style.display = "block";
+      if (firstPlayer == true) {
+        document.getElementById("modal-message").innerHTML = "You're sub has been sunk! You lose."
+      } else if (firstPlayer == false) {
+        document.getElementById("modal-message").innerHTML = "You sunk the opponent's sub! You win!"
+      }
+      return true;
 
+  } else if (currentGameState.playerTwoHp == 0) {
+    document.getElementById("popup-modal").style.display = "block";
+      if (firstPlayer == true) {
+        document.getElementById("modal-message").innerHTML = "You sunk the opponent's sub! You win!"
+      } else if (firstPlayer == false) {
+        document.getElementById("modal-message").innerHTML = "You're sub has been sunk! You lose."
+    }
+    return true;
+  }
+  return false;
+}
 
 
 </script>

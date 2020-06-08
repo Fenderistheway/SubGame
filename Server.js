@@ -10,29 +10,7 @@ var mySocketId;
 
 var gameState = [];
 
-var currentGameState = {
-activePlayer: 1,
-
-playerOnePosition: 0,
-playerOneHp: 100,
-playerOneMaxPower: 5,
-playerOneCurrentPower: 5,
-PlayerOneAmmo: 6,
-PlayerOxygen: 100,
-PlayerOneLocationTileCode: 0,
-
-playerTwoPosition: 0,
-playerTwoHp: 100,
-playerTwoMaxPower: 5,
-playerTwoCurrentPower: 5,
-PlayerTwoAmmo: 6,
-PlayerTwoOxygen: 100,
-PlayerTwoOneLocationTileCode: 0,
-
-playerOneTakeDamage: false,
-playerTwoTakeDamage: false,
-
-}
+var currentGameState = [];
 
 var roomno = 1;
 
@@ -58,6 +36,40 @@ io.on('connection', (socket) => {
      //Send this event to everyone in the room.
      io.sockets.in("room-"+roomno).emit('connectToRoom', roomno);
 
+     if (isEven(numOfUsers)) {
+       generateStartPos();
+     } else {};
+
+
+     currentGameState[roomno] = {
+     activePlayer: 1,
+
+     playerOnePosition: firstPlayerStartPos,
+     playerOneHp: 100,
+     playerOneMaxPower: 5,
+     playerOneCurrentPower: 5,
+     playerOneAmmo: 5,
+     playerOneOxygen: 100,
+
+     playerTwoPosition: secondPlayerStartPos,
+     playerTwoHp: 100,
+     playerTwoMaxPower: 5,
+     playerTwoCurrentPower: 5,
+     playerTwoAmmo: 5,
+     playerTwoOxygen: 100,
+
+     playerOneTorpedoLocation: "x",
+     playerTwoTorpedoLocation: "x",
+
+     playerOneHit: false,
+     playerTwoHit: false,
+
+     playerOneTakeDamage: false,
+     playerTwoTakeDamage: false,
+     }
+
+     console.log("Current Game State of Room " + roomno + " " + currentGameState[roomno].playerOnePosition);
+
 
 
   numOfUsers++
@@ -79,13 +91,26 @@ io.on('connection', (socket) => {
       } else {
         io.emit('playerOne')
       };
-
-
-
-
     });
 
 
+//Receive request for game state, then send current game state
+    socket.on('getCurrentGameState', function(roomNumber) {
+        io.sockets.in("room-"+ roomNumber).emit('gState', currentGameState[roomNumber]);
+      });
+
+//Receive request for game state, then send current game state
+    socket.on('playerNumber', function(roomNumber) {
+      if (isEven(numOfUsers)) {
+        //io.sockets.in("room-"+ roomNumber).emit('pNum', false);
+        socket.emit('pNum', false);
+      } else {
+        //io.sockets.in("room-"+ roomNumber).emit('pNum', true);
+        socket.emit('pNum', true);
+      };
+        });
+
+/*
   //Creates new player data
     socket.on('newPlayer', function() {
     //  gameState.players[socket.id] = {
@@ -111,6 +136,8 @@ socket.on("getGamestate", function() {
     io.emit('userId', socket.id);
 });
 
+*/
+
 
 //Receive chat message and then send chat messsage to room
   socket.on('message', function(message, uname) {
@@ -119,11 +146,66 @@ socket.on("getGamestate", function() {
     io.sockets.in("room-"+message.roomno).emit('message' , {sender: socket.uname, msg: message.msg});
   });
 
-  socket.on('currentPosition', function(currentTileNum) {
-    gameState.playerOneCurrentLocation = currentTileNum;
-    console.log("Player is on tile num: " + gameState.playerOneCurrentLocation);
+  //Receives tile where sub wants to move and updates game state
+    socket.on('currentPos', function(currentPos) {
+      if (currentPos.fPlayer == true) {
+        currentGameState[currentPos.roomno].playerOnePosition = currentPos.tileNum;
+        currentGameState[currentPos.roomno].playerOneCurrentPower--
+        console.log("Player moved to tile #: " + currentGameState[currentPos.roomno].playerOnePosition + " and they have this much power: " + currentGameState[currentPos.roomno].playerOneCurrentPower);
+      } else if (currentPos.fPlayer == false) {
+        currentGameState[currentPos.roomno].playerTwoPosition = currentPos.tileNum;
+        currentGameState[currentPos.roomno].playerTwoCurrentPower--
+        console.log("Player moved to tile #: " + currentGameState[currentPos.roomno].playerTwoPosition + " and they have this much power: " + currentGameState[currentPos.roomno].playerTwoCurrentPower);
+      }
+    });
 
-  });
+    //Receives end turn trigger from player
+      socket.on('endTurn', function(eTurn) {
+        if (eTurn.fPlayer == true) {
+          currentGameState[eTurn.roomno].activePlayer = 2;
+          currentGameState[eTurn.roomno].playerOneCurrentPower = currentGameState[eTurn.roomno].playerOneMaxPower;
+          currentGameState[eTurn.roomno].playerOneOxygen = currentGameState[eTurn.roomno].playerOneOxygen - 20;
+          io.sockets.in("room-"+ eTurn.roomno).emit('nextTurn');
+        } else if (eTurn.fPlayer == false) {
+          currentGameState[eTurn.roomno].activePlayer = 1;
+          currentGameState[eTurn.roomno].playerTwoCurrentPower = currentGameState[eTurn.roomno].playerTwoMaxPower;
+          currentGameState[eTurn.roomno].playerTwoOxygen = currentGameState[eTurn.roomno].playerTwoOxygen - 20;
+          io.sockets.in("room-"+ eTurn.roomno).emit('nextTurn');
+        }
+      });
+
+    //Receives tile where sub shoots torpedo and updates game state
+      socket.on('torpedoPos', function(currentPos) {
+        if (currentPos.fPlayer == true) {
+          currentGameState[currentPos.roomno].playerOneTorpedoLocation = currentPos.tileNum;
+          currentGameState[currentPos.roomno].playerOneAmmo--;
+          currentGameState[currentPos.roomno].playerOneCurrentPower = currentGameState[currentPos.roomno].playerTwoCurrentPower - 5;
+          console.log("Player shot torpedo on tile #: " + currentGameState[currentPos.roomno].playerOneTorpedoLocation + " and they have this much ammo: " + currentGameState[currentPos.roomno].playerOneAmmo);
+        } else if (currentPos.fPlayer == false) {
+          currentGameState[currentPos.roomno].playerTwoTorpedoLocation = currentPos.tileNum;
+          currentGameState[currentPos.roomno].playerTwoAmmo--
+          currentGameState[currentPos.roomno].playerTwoCurrentPower = currentGameState[currentPos.roomno].playerTwoCurrentPower - 5;
+          console.log("Player shot torpedo on tile #: " + currentGameState[currentPos.roomno].playerTwoTorpedoLocation + " and they have this much ammo: " + currentGameState[currentPos.roomno].playerTwoAmmo);
+          }
+          //Check if torpedo hits and does damage
+          if (currentGameState[currentPos.roomno].playerOneTorpedoLocation == currentGameState[currentPos.roomno].playerTwoPosition) {
+            currentGameState[currentPos.roomno].playerTwoHp = currentGameState[currentPos.roomno].playerTwoHp - 100;
+            currentGameState[currentPos.roomno].playerTwoHit = true;
+            currentGameState[currentPos.roomno].playerOneTorpedoLocation = "x";
+
+          } else if(currentGameState[currentPos.roomno].playerTwoTorpedoLocation == currentGameState[currentPos.roomno].playerOnePosition ) {
+            currentGameState[currentPos.roomno].playerOneHp = currentGameState[currentPos.roomno].playerOneHp - 100;
+            currentGameState[currentPos.roomno].playerOneHit = true;
+            currentGameState[currentPos.roomno].playerTwoTorpedoLocation = "x";
+           }
+
+      });
+
+
+//  socket.on('currentPosition', function(currentTileNum) {
+    //gameState.playerOneCurrentLocation = currentTileNum;
+  //  console.log("Player is on tile num: " + gameState.playerOneCurrentLocation);
+//  });
 
   //Action when player disconnects
   socket.on('disconnect', () => {
