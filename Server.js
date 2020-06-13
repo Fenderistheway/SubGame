@@ -26,15 +26,22 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-
   //Increase roomno 2 clients are present in a room.
      if(io.nsps['/'].adapter.rooms["room-"+roomno] && io.nsps['/'].adapter.rooms["room-"+roomno].length > 1) {
        roomno++;
      }
      socket.join("room-"+roomno);
 
-     //Send this event to everyone in the room.
+     var room = io.sockets.adapter.rooms["room-"+roomno];
+     console.log(room);
+     setTimeout(function() {if (room.length == 2) {
+       roomno++
+     }}, 1000);
+
+
+     //Send roomno
      io.sockets.in("room-"+roomno).emit('connectToRoom', roomno);
+
 
      if (isEven(numOfUsers)) {
        generateStartPos();
@@ -82,15 +89,16 @@ io.on('connection', (socket) => {
       io.emit('uname' , uname);
 
       if (isEven(numOfUsers)) {
+
         io.emit('opponentFound')
       } else {};
 
       //send whether they're first or second player
-      if (isEven(numOfUsers)) {
+      /*if (isEven(numOfUsers)) {
         io.emit('playerTwo')
       } else {
         io.emit('playerOne')
-      };
+      };*/
     });
 
 
@@ -99,7 +107,24 @@ io.on('connection', (socket) => {
         io.sockets.in("room-"+ roomNumber).emit('gState', currentGameState[roomNumber]);
       });
 
-//Receive request for game state, then send current game state
+
+      socket.on('playerNumber', function(roomNumber) {
+        var room = io.sockets.adapter.rooms["room-"+roomno];
+        console.log(room);
+        console.log(roomno);
+
+        if (room.length == 2) {
+          //io.sockets.in("room-"+ roomNumber).emit('pNum', false);
+          socket.emit('pNum', false);
+        } else {
+          //io.sockets.in("room-"+ roomNumber).emit('pNum', true);
+          socket.emit('pNum', true);
+        };
+      });
+
+
+
+/*Receive request for game state, then send current game state
     socket.on('playerNumber', function(roomNumber) {
       if (isEven(numOfUsers)) {
         //io.sockets.in("room-"+ roomNumber).emit('pNum', false);
@@ -108,7 +133,10 @@ io.on('connection', (socket) => {
         //io.sockets.in("room-"+ roomNumber).emit('pNum', true);
         socket.emit('pNum', true);
       };
-        });
+    }); */
+
+
+
 
 /*
   //Creates new player data
@@ -200,6 +228,26 @@ socket.on("getGamestate", function() {
            }
 
       });
+
+//receive that sub is rising
+      socket.on('subRising', function(raise) {
+      socket.to("room-" + raise.roomno).emit('subRaiseTile', raise.tileNum);
+      if (raise.fPlayer == true) {
+        currentGameState[raise.roomno].playerOneOxygen = 100;
+      } else if (raise.fPlayer == false) {
+        currentGameState[raise.roomno].playerTwoOxygen = 100;
+        }
+
+      });
+
+  //recieve sonar pulse
+  socket.on('sonarPulse', function(sonar) {
+    if (sonar.fPlayer == true) {
+      currentGameState[sonar.roomno].playerOneCurrentPower = currentGameState[sonar.roomno].playerOneCurrentPower - 2;
+    } else if (sonar.fPlayer == false) {
+      currentGameState[sonar.roomno].playerTwoCurrentPower = currentGameState[sonar.roomno].playerTwoCurrentPower - 2;
+    }
+  });
 
 
 //  socket.on('currentPosition', function(currentTileNum) {
