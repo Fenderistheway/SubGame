@@ -1089,16 +1089,22 @@ function startGame() {
   //alert(playerNum);
   setTimeout(turnOnModal, 1000);
 
+  socket.on('myPos', function(tile) {
+  currentTileNum = tile;
+  });
 
 if (firstPlayer == true) {
-  currentTileNum = currentGameState.playerOnePosition;
+  socket.emit("getMyPos", {roomNo: roomNumber, playerNum: 1})
+  //currentTileNum = currentGameState.playerOnePosition;
 } else if (firstPlayer == false) {
-  currentTileNum = currentGameState.playerTwoPosition;
-}
+  socket.emit("getMyPos", {roomNo: roomNumber, playerNum: 2})
+  //currentTileNum = currentGameState.playerTwoPosition;
+};
+
 
   myCurrentPosition[0] = tilePosition[currentTileNum].name;
-  document.getElementById(myCurrentPosition[0]).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/SubanimatedSubmergerdrise.GIF?raw=true")';
-  setTimeout(subIdleAnimation, 2000);
+  setTimeout(function () {document.getElementById(tilePosition[currentTileNum].name).style.content = 'url(https://github.com/Fenderistheway/SubGame/blob/master/SubanimatedSubmergerdrise.GIF?raw=true)';}, 500);
+  setTimeout(subIdleAnimation, 2400);
   document.getElementById("screen-text").innerHTML = "What are my orders, captain?";
   updateStats();
 }
@@ -1166,6 +1172,7 @@ if (tilePosition[tileCode]['x'] == northTile[0] && tilePosition[tileCode]['y'] =
 function torpedoWaterTile(torpedoPosition) {
   document.getElementById(tilePosition[torpedoPosition]['name']).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/WaterTile.PNG?raw=true")';
   document.getElementById(tilePosition[torpedoPosition]['name']).style.transform = 'rotate(0deg)';
+
   if ((firstPlayer == true && torpedoPosition == currentGameState.playerTwoPosition) || (firstPlayer == false && torpedoPosition == currentGameState.playerOnePosition)) {
     document.getElementById(tilePosition[torpedoPosition]['name']).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/SubanimatedRiseOpp.GIF?raw=true")';
     setTimeout(floatOppShot, 1800, torpedoPosition);
@@ -1291,127 +1298,146 @@ function displayRangeSonar(currentTileNum) {
 // turn on blinking tiles (lowers and raises opasity)
   if (northTile[0] > 0 && northTile[0] < 11 && northTile[1] > 0 && northTile[1] < 10) {
       document.getElementById(rangeSonarTileNames[0]).style.animation = 'sonarPulse 3s infinite';
+      socket.emit('sonarCheck' , {fPlayer: firstPlayer, roomno: roomNumber, tileNum: currentTileNum});
 
-      if ((currentTileNum - 10 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum - 10 == currentGameState.playerOnePosition && firstPlayer == false)) {
+    /*  if ((currentTileNum - 10 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum - 10 == currentGameState.playerOnePosition && firstPlayer == false)) {
         document.getElementById(rangeSonarTileNames[0]).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/Subshadow.GIF?raw=true")';
         document.getElementById("screen-text").innerHTML = "Enemy sub detected!";
         setTimeout(sonarWaterTile, 6700, 0);
-      }
+      }*/
     }
 
   if (northTileTwo[0] > 0 && northTileTwo[0] < 11 && northTileTwo[1] > 0 && northTileTwo[1] < 10) {
     document.getElementById(rangeSonarTileNames[1]).style.animation = 'sonarPulse 3s infinite';
+    socket.emit('sonarCheck' , {fPlayer: firstPlayer, roomno: roomNumber, tileNum: currentTileNum});
 
-    if ((currentTileNum - 20 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum - 20 == currentGameState.playerOnePosition && firstPlayer == false)) {
+    /*if ((currentTileNum - 20 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum - 20 == currentGameState.playerOnePosition && firstPlayer == false)) {
       document.getElementById(rangeSonarTileNames[1]).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/Subshadow.GIF?raw=true")';
       document.getElementById("screen-text").innerHTML = "Enemy sub detected!";
       setTimeout(sonarWaterTile, 6700, 1);
-    }
+    } */
   }
 
   if (northEastTile[0] > 0 && northEastTile[0] < 11 && northEastTile[1] > 0 && northEastTile[1] < 10) {
       document.getElementById(rangeSonarTileNames[2]).style.animation = 'sonarPulse 3s infinite';
+      socket.emit('sonarCheck' , {fPlayer: firstPlayer, roomno: roomNumber, tileNum: currentTileNum});
 
-      if ((currentTileNum - 9 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum - 9 == currentGameState.playerOnePosition && firstPlayer == false)) {
+    /*  if ((currentTileNum - 9 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum - 9 == currentGameState.playerOnePosition && firstPlayer == false)) {
         document.getElementById(rangeSonarTileNames[2]).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/Subshadow.GIF?raw=true")';
         document.getElementById("screen-text").innerHTML = "Enemy sub detected!";
         setTimeout(sonarWaterTile, 6700, 2);
-      }
+      } */
     }
 
   if (eastTile[0] > 0 && eastTile[0] < 11 && eastTile[1] > 0 && eastTile[1] < 10) {
       document.getElementById(rangeSonarTileNames[3]).style.animation = 'sonarPulse 3s infinite';
+      socket.emit('sonarCheck' , {fPlayer: firstPlayer, roomno: roomNumber, tileNum: currentTileNum});
 
-      if ((currentTileNum + 1 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum + 1 == currentGameState.playerOnePosition && firstPlayer == false)) {
+    /*  if ((currentTileNum + 1 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum + 1 == currentGameState.playerOnePosition && firstPlayer == false)) {
         document.getElementById(rangeSonarTileNames[3]).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/Subshadow.GIF?raw=true")';
         document.getElementById("screen-text").innerHTML = "Enemy sub detected!";
         setTimeout(sonarWaterTile, 6700, 3);
-      }
+      } */
     }
 
   if (eastTileTwo[0] > 0 && eastTileTwo[0] < 11 && eastTileTwo[1] > 0 && eastTileTwo[1] < 10) {
       document.getElementById(rangeSonarTileNames[4]).style.animation = 'sonarPulse 3s infinite';
+      socket.emit('sonarCheck' , {fPlayer: firstPlayer, roomno: roomNumber, tileNum: currentTileNum});
 
-      if ((currentTileNum + 2 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum + 2 == currentGameState.playerOnePosition && firstPlayer == false)) {
+    /*  if ((currentTileNum + 2 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum + 2 == currentGameState.playerOnePosition && firstPlayer == false)) {
         document.getElementById(rangeSonarTileNames[4]).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/Subshadow.GIF?raw=true")';
         document.getElementById("screen-text").innerHTML = "Enemy sub detected!";
         setTimeout(sonarWaterTile, 6700, 4);
-      }
+      } */
     }
 
   if (southEastTile[0] > 0 && southEastTile[0] < 11 && southEastTile[1] > 0 && southEastTile[1] < 10) {
       document.getElementById(rangeSonarTileNames[5]).style.animation = 'sonarPulse 3s infinite';
+      socket.emit('sonarCheck' , {fPlayer: firstPlayer, roomno: roomNumber, tileNum: currentTileNum});
 
-      if ((currentTileNum + 11 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum + 11 == currentGameState.playerOnePosition && firstPlayer == false)) {
+    /*  if ((currentTileNum + 11 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum + 11 == currentGameState.playerOnePosition && firstPlayer == false)) {
         document.getElementById(rangeSonarTileNames[5]).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/Subshadow.GIF?raw=true")';
         document.getElementById("screen-text").innerHTML = "Enemy sub detected!";
         setTimeout(sonarWaterTile, 6700, 5);
-      }
+      } */
     }
 
   if (southTile[0] > 0 && southTile[0] < 11 && southTile[1] > 0 && southTile[1] < 10) {
       document.getElementById(rangeSonarTileNames[6]).style.animation = 'sonarPulse 3s infinite';
+      socket.emit('sonarCheck' , {fPlayer: firstPlayer, roomno: roomNumber, tileNum: currentTileNum});
 
-      if ((currentTileNum + 10 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum + 10 == currentGameState.playerOnePosition && firstPlayer == false)) {
+    /*  if ((currentTileNum + 10 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum + 10 == currentGameState.playerOnePosition && firstPlayer == false)) {
         document.getElementById(rangeSonarTileNames[6]).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/Subshadow.GIF?raw=true")';
         document.getElementById("screen-text").innerHTML = "Enemy sub detected!";
         setTimeout(sonarWaterTile, 6700, 6);
-      }
+      } */
     }
 
   if (southTileTwo[0] > 0 && southTileTwo[0] < 11 && southTileTwo[1] > 0 && southTileTwo[1] < 10) {
       document.getElementById(rangeSonarTileNames[7]).style.animation = 'sonarPulse 3s infinite';
+      socket.emit('sonarCheck' , {fPlayer: firstPlayer, roomno: roomNumber, tileNum: currentTileNum});
 
-      if ((currentTileNum + 20 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum + 20 == currentGameState.playerOnePosition && firstPlayer == false)) {
+    /*  if ((currentTileNum + 20 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum + 20 == currentGameState.playerOnePosition && firstPlayer == false)) {
         document.getElementById(rangeSonarTileNames[7]).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/Subshadow.GIF?raw=true")';
         document.getElementById("screen-text").innerHTML = "Enemy sub detected!";
         setTimeout(sonarWaterTile, 6700, 7);
-      }
+      } */
     }
 
   if (southWestTile[0] > 0 && southWestTile[0] < 11 && southWestTile[1] > 0 && southWestTile[1] < 10) {
       document.getElementById(rangeSonarTileNames[8]).style.animation = 'sonarPulse 3s infinite';
+      socket.emit('sonarCheck' , {fPlayer: firstPlayer, roomno: roomNumber, tileNum: currentTileNum});
 
-      if ((currentTileNum + 9 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum + 9 == currentGameState.playerOnePosition && firstPlayer == false)) {
+    /*  if ((currentTileNum + 9 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum + 9 == currentGameState.playerOnePosition && firstPlayer == false)) {
         document.getElementById(rangeSonarTileNames[8]).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/Subshadow.GIF?raw=true")';
         document.getElementById("screen-text").innerHTML = "Enemy sub detected!";
         setTimeout(sonarWaterTile, 6700, 8);
-      }
+      } */
     }
 
   if (westTile[0] > 0 && westTile[0] < 11 && westTile[1] > 0 && westTile[1] < 10) {
       document.getElementById(rangeSonarTileNames[9]).style.animation = 'sonarPulse 3s infinite';
+      socket.emit('sonarCheck' , {fPlayer: firstPlayer, roomno: roomNumber, tileNum: currentTileNum});
 
-      if ((currentTileNum - 1 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum - 1 == currentGameState.playerOnePosition && firstPlayer == false)) {
+    /*  if ((currentTileNum - 1 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum - 1 == currentGameState.playerOnePosition && firstPlayer == false)) {
         document.getElementById(rangeSonarTileNames[9]).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/Subshadow.GIF?raw=true")';
         document.getElementById("screen-text").innerHTML = "Enemy sub detected!";
         setTimeout(sonarWaterTile, 6700, 9);
-      }
+      } */
     }
 
   if (westTileTwo[0] > 0 && westTileTwo[0] < 11 && westTileTwo[1] > 0 && westTileTwo[1] < 10) {
       document.getElementById(rangeSonarTileNames[10]).style.animation = 'sonarPulse 3s infinite';
+      socket.emit('sonarCheck' , {fPlayer: firstPlayer, roomno: roomNumber, tileNum: currentTileNum});
 
-      if ((currentTileNum - 2 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum - 2 == currentGameState.playerOnePosition && firstPlayer == false)) {
+    /*  if ((currentTileNum - 2 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum - 2 == currentGameState.playerOnePosition && firstPlayer == false)) {
         document.getElementById(rangeSonarTileNames[10]).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/Subshadow.GIF?raw=true")';
         document.getElementById("screen-text").innerHTML = "Enemy sub detected!";
         setTimeout(sonarWaterTile, 6700, 10);
-      }
+      } */
     }
 
   if (northWestTile[0] > 0 && northWestTile[0] < 11 && northWestTile[1] > 0 && northWestTile[1] < 10) {
       document.getElementById(rangeSonarTileNames[11]).style.animation = 'sonarPulse 3s infinite';
+      socket.emit('sonarCheck' , {fPlayer: firstPlayer, roomno: roomNumber, tileNum: currentTileNum});
 
-      if ((currentTileNum - 11 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum - 11 == currentGameState.playerOnePosition && firstPlayer == false)) {
+    /*  if ((currentTileNum - 11 == currentGameState.playerTwoPosition && firstPlayer == true) || (currentTileNum - 11 == currentGameState.playerOnePosition && firstPlayer == false)) {
         document.getElementById(rangeSonarTileNames[11]).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/Subshadow.GIF?raw=true")';
         document.getElementById("screen-text").innerHTML = "Enemy sub detected!";
         setTimeout(sonarWaterTile, 6700, 11);
-      }
+      } */
     }
 
       setTimeout(turnOffSonar, 6000)
 
 }
+
+socket.on("sonarOppFound", function(Pos) {
+tilePosition[Pos]
+document.getElementById(tilePosition[Pos].name).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/Subshadow.GIF?raw=true")';
+document.getElementById("screen-text").innerHTML = "Enemy sub detected!";
+setTimeout(function() {document.getElementById(tilePosition[Pos].name).style.content = 'url("https://github.com/Fenderistheway/SubGame/blob/master/WaterTile.PNG?raw=true")';}, 6700);
+})
 
 //loads sonar water tile
 function sonarWaterTile(sonarWater) {

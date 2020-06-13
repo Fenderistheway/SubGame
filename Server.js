@@ -122,7 +122,13 @@ io.on('connection', (socket) => {
         };
       });
 
-
+      socket.on('getMyPos', function(data) {
+      if (data.playerNum == 1) {
+        socket.emit("myPos", currentGameState[data.roomNo].playerOnePosition);
+      } else if (data.playerNum == 2) {
+        socket.emit("myPos", currentGameState[data.roomNo].playerTwoPosition);
+      }
+    });
 
 /*Receive request for game state, then send current game state
     socket.on('playerNumber', function(roomNumber) {
@@ -248,6 +254,46 @@ socket.on("getGamestate", function() {
       currentGameState[sonar.roomno].playerTwoCurrentPower = currentGameState[sonar.roomno].playerTwoCurrentPower - 2;
     }
   });
+
+//Receive data to check if sonar detected opponent
+socket.on('sonarCheck', function(data) {
+if (data.fPlayer == true) {
+  if (data.tileNum - 10 == currentGameState[data.roomno].playerTwoPosition ||
+      data.tileNum - 20 == currentGameState[data.roomno].playerTwoPosition ||
+      data.tileNum - 9 == currentGameState[data.roomno].playerTwoPosition ||
+      data.tileNum + 1 == currentGameState[data.roomno].playerTwoPosition ||
+      data.tileNum + 2 == currentGameState[data.roomno].playerTwoPosition ||
+      data.tileNum + 11 == currentGameState[data.roomno].playerTwoPosition ||
+      data.tileNum + 10 == currentGameState[data.roomno].playerTwoPosition ||
+      data.tileNum + 20 == currentGameState[data.roomno].playerTwoPosition ||
+      data.tileNum + 9 == currentGameState[data.roomno].playerTwoPosition ||
+      data.tileNum - 1 == currentGameState[data.roomno].playerTwoPosition ||
+      data.tileNum - 2 == currentGameState[data.roomno].playerTwoPosition ||
+      data.tileNum - 11 == currentGameState[data.roomno].playerTwoPosition) {
+    socket.emit('sonarOppFound', currentGameState[data.roomno].playerTwoPosition)
+  }
+} else if (data.fPlayer == false) {
+  if (data.tileNum - 10 == currentGameState[data.roomno].playerOnePosition ||
+      data.tileNum - 20 == currentGameState[data.roomno].playerOnePosition ||
+      data.tileNum - 9 == currentGameState[data.roomno].playerOnePosition ||
+      data.tileNum + 1 == currentGameState[data.roomno].playerOnePosition ||
+      data.tileNum + 2 == currentGameState[data.roomno].playerOnePosition ||
+      data.tileNum + 11 == currentGameState[data.roomno].playerOnePosition ||
+      data.tileNum + 10 == currentGameState[data.roomno].playerOnePosition ||
+      data.tileNum + 20 == currentGameState[data.roomno].playerOnePosition ||
+      data.tileNum + 9 == currentGameState[data.roomno].playerOnePosition ||
+      data.tileNum - 1 == currentGameState[data.roomno].playerOnePosition ||
+      data.tileNum - 2 == currentGameState[data.roomno].playerOnePosition ||
+      data.tileNum - 11 == currentGameState[data.roomno].playerOnePosition) {
+    socket.emit('sonarOppFound', currentGameState[data.roomno].playerOnePosition)
+  }
+
+
+}
+
+
+
+});
 
 
 //  socket.on('currentPosition', function(currentTileNum) {
