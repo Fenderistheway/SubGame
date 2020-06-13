@@ -1,5 +1,9 @@
-var app = require('express')();
+var express = require('express')
+var app = express();
+app.use(express.static('static'))
+
 var http = require('http').createServer(app);
+const PORT = process.env.PORT || 3000;
 var io = require('socket.io')(http);
 
 var uname;
@@ -22,7 +26,7 @@ var secondPlayerStartPos;
 //Username
 // Loading the index file . html displayed to the client
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/Subhunt.html');
+  res.sendFile(__dirname + '/static/html/Subhunt.html');
 });
 
 io.on('connection', (socket) => {
@@ -314,8 +318,8 @@ if (data.fPlayer == true) {
 
 });
 
-http.listen(3000, () => {
-  console.log('listening on :3000');
+http.listen(PORT, () => {
+  console.log('listening on :' + PORT);
 });
 
 
