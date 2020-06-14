@@ -92,7 +92,8 @@ io.on('connection', (socket) => {
       username[0] = uname;
       io.emit('uname' , uname);
 
-      if (isEven(numOfUsers)) {
+      //if (isEven(numOfUsers)) {
+      if (room.length == 2) {
 
         io.emit('opponentFound')
       } else {};
