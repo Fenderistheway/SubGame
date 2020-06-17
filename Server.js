@@ -21,6 +21,11 @@ var roomno = 1;
 var firstPlayerStartPos;
 var secondPlayerStartPos;
 
+var firstPlayerBaseOnePos;
+var firstPlayerBaseTwoPos;
+var secondPlayerBaseOnePos;
+var secondPlayerBaseTwoPos;
+
 
 
 //Username
@@ -47,8 +52,9 @@ io.on('connection', (socket) => {
      io.sockets.in("room-"+roomno).emit('connectToRoom', roomno);
 
 
-     if (isEven(numOfUsers)) {
-       generateStartPos();
+     if (room.length == 1) {
+       generateStartPos(roomno);
+       generateBasePos(roomno);
      } else {};
 
 
@@ -69,14 +75,25 @@ io.on('connection', (socket) => {
      playerTwoAmmo: 5,
      playerTwoOxygen: 100,
 
-     playerOneTorpedoLocation: "x",
-     playerTwoTorpedoLocation: "x",
+     playerOneTorpedoLocation: 0,
+     playerTwoTorpedoLocation: 0,
 
      playerOneHit: false,
      playerTwoHit: false,
 
      playerOneTakeDamage: false,
      playerTwoTakeDamage: false,
+
+     playerOneBaseOnePos: firstPlayerBaseOnePos,
+     playerOneBaseTwoPos: firstPlayerBaseTwoPos,
+     playerTwoBaseOnePos: secondPlayerBaseOnePos,
+     playerTwoBaseTwoPos: secondPlayerBaseTwoPos,
+
+     playerOneBaseOneDis: false,
+     playerOneBaseTwoDis: false,
+     playerTwoBaseOneDis: false,
+     playerTwoBaseTwoDis: false,
+
      }
 
      console.log("Current Game State of Room " + roomno + " " + currentGameState[roomno].playerOnePosition);
@@ -130,8 +147,10 @@ io.on('connection', (socket) => {
       socket.on('getMyPos', function(data) {
       if (data.playerNum == 1) {
         socket.emit("myPos", currentGameState[data.roomNo].playerOnePosition);
+        socket.emit("myBase", {baseOne: currentGameState[data.roomNo].playerOneBaseOnePos, baseTwo: currentGameState[data.roomNo].playerOneBaseTwoPos});
       } else if (data.playerNum == 2) {
         socket.emit("myPos", currentGameState[data.roomNo].playerTwoPosition);
+        socket.emit("myBase", {baseOne: currentGameState[data.roomNo].playerTwoBaseOnePos, baseTwo: currentGameState[data.roomNo].playerTwoBaseTwoPos});
       }
     });
 
@@ -236,8 +255,27 @@ socket.on("getGamestate", function() {
             currentGameState[currentPos.roomno].playerOneHp = currentGameState[currentPos.roomno].playerOneHp - 100;
             currentGameState[currentPos.roomno].playerOneHit = true;
             currentGameState[currentPos.roomno].playerTwoTorpedoLocation = "x";
-           }
+          }
+          //check it bases get hit and updates game state
+           if(currentGameState[currentPos.roomno].playerOneTorpedoLocation == currentGameState[currentPos.roomno].playerOneBaseOnePos || currentGameState[currentPos.roomno].playerTwoTorpedoLocation == currentGameState[currentPos.roomno].playerOneBaseOnePos) {
+            currentGameState[currentPos.roomno].playerOneBaseOneDis = true;
+            console.log(currentGameState[currentPos.roomno].playerOneTorpedoLocation + "   " + currentGameState[currentPos.roomno].playerTwoTorpedoLocation + "   " + currentGameState[currentPos.roomno].playerOneBaseOnePos);
+          }
+          if(currentGameState[currentPos.roomno].playerOneTorpedoLocation == currentGameState[currentPos.roomno].playerOneBaseTwoPos || currentGameState[currentPos.roomno].playerTwoTorpedoLocation == currentGameState[currentPos.roomno].playerOneBaseTwoPos) {
+           currentGameState[currentPos.roomno].playerOneBaseTwoDis = true;
+           console.log("player one base Two distroyed");
+         }
+         if(currentGameState[currentPos.roomno].playerOneTorpedoLocation == currentGameState[currentPos.roomno].playerTwoBaseOnePos || currentGameState[currentPos.roomno].playerTwoTorpedoLocation == currentGameState[currentPos.roomno].playerTwoBaseOnePos) {
+          currentGameState[currentPos.roomno].playerTwoBaseOneDis = true;
+          console.log("player two base one distroyed");
+        }
+        if(currentGameState[currentPos.roomno].playerOneTorpedoLocation == currentGameState[currentPos.roomno].playerTwoBaseTwoPos || currentGameState[currentPos.roomno].playerTwoTorpedoLocation == currentGameState[currentPos.roomno].playerTwoBaseTwoPos) {
+         currentGameState[currentPos.roomno].playerTwoBaseTwoDis = true;
+         console.log("player two base two distroyed");
+       }
 
+
+          io.sockets.in("room-"+ currentPos.roomno).emit("shotPos", currentPos);
       });
 
 //receive that sub is rising
@@ -275,8 +313,37 @@ if (data.fPlayer == true) {
       data.tileNum - 1 == currentGameState[data.roomno].playerTwoPosition ||
       data.tileNum - 2 == currentGameState[data.roomno].playerTwoPosition ||
       data.tileNum - 11 == currentGameState[data.roomno].playerTwoPosition) {
-    socket.emit('sonarOppFound', currentGameState[data.roomno].playerTwoPosition)
+    socket.emit('sonarOppFound', currentGameState[data.roomno].playerTwoPosition);
   }
+  if (data.tileNum - 10 == currentGameState[data.roomno].playerTwoBaseOnePos ||
+      data.tileNum - 20 == currentGameState[data.roomno].playerTwoBaseOnePos ||
+      data.tileNum - 9 == currentGameState[data.roomno].playerTwoBaseOnePos ||
+      data.tileNum + 1 == currentGameState[data.roomno].playerTwoBaseOnePos ||
+      data.tileNum + 2 == currentGameState[data.roomno].playerTwoBaseOnePos ||
+      data.tileNum + 11 == currentGameState[data.roomno].playerTwoBaseOnePos ||
+      data.tileNum + 10 == currentGameState[data.roomno].playerTwoBaseOnePos ||
+      data.tileNum + 20 == currentGameState[data.roomno].playerTwoBaseOnePos ||
+      data.tileNum + 9 == currentGameState[data.roomno].playerTwoBaseOnePos ||
+      data.tileNum - 1 == currentGameState[data.roomno].playerTwoBaseOnePos ||
+      data.tileNum - 2 == currentGameState[data.roomno].playerTwoBaseOnePos ||
+      data.tileNum - 11 == currentGameState[data.roomno].playerTwoBaseOnePos) {
+    socket.emit('sonarOppFoundBaseOne', currentGameState[data.roomno].playerTwoBaseOnePos);
+}
+if (data.tileNum - 10 == currentGameState[data.roomno].playerTwoBaseTwoPos ||
+    data.tileNum - 20 == currentGameState[data.roomno].playerTwoBaseTwoPos ||
+    data.tileNum - 9 == currentGameState[data.roomno].playerTwoBaseTwoPos ||
+    data.tileNum + 1 == currentGameState[data.roomno].playerTwoBaseTwoPos ||
+    data.tileNum + 2 == currentGameState[data.roomno].playerTwoBaseTwoPos ||
+    data.tileNum + 11 == currentGameState[data.roomno].playerTwoBaseTwoPos ||
+    data.tileNum + 10 == currentGameState[data.roomno].playerTwoBaseTwoPos ||
+    data.tileNum + 20 == currentGameState[data.roomno].playerTwoBaseTwoPos ||
+    data.tileNum + 9 == currentGameState[data.roomno].playerTwoBaseTwoPos ||
+    data.tileNum - 1 == currentGameState[data.roomno].playerTwoBaseTwoPos ||
+    data.tileNum - 2 == currentGameState[data.roomno].playerTwoBaseTwoPos ||
+    data.tileNum - 11 == currentGameState[data.roomno].playerTwoBaseTwoPos) {
+  socket.emit('sonarOppFoundBaseTwo', currentGameState[data.roomno].playerTwoBaseTwoPos);
+}
+
 } else if (data.fPlayer == false) {
   if (data.tileNum - 10 == currentGameState[data.roomno].playerOnePosition ||
       data.tileNum - 20 == currentGameState[data.roomno].playerOnePosition ||
@@ -290,9 +357,36 @@ if (data.fPlayer == true) {
       data.tileNum - 1 == currentGameState[data.roomno].playerOnePosition ||
       data.tileNum - 2 == currentGameState[data.roomno].playerOnePosition ||
       data.tileNum - 11 == currentGameState[data.roomno].playerOnePosition) {
-    socket.emit('sonarOppFound', currentGameState[data.roomno].playerOnePosition)
+    socket.emit('sonarOppFound', currentGameState[data.roomno].playerOnePosition);
   }
-
+  if (data.tileNum - 10 == currentGameState[data.roomno].playerOneBaseOnePos ||
+      data.tileNum - 20 == currentGameState[data.roomno].playerOneBaseOnePos ||
+      data.tileNum - 9 == currentGameState[data.roomno].playerOneBaseOnePos ||
+      data.tileNum + 1 == currentGameState[data.roomno].playerOneBaseOnePos ||
+      data.tileNum + 2 == currentGameState[data.roomno].playerOneBaseOnePos ||
+      data.tileNum + 11 == currentGameState[data.roomno].playerOneBaseOnePos ||
+      data.tileNum + 10 == currentGameState[data.roomno].playerOneBaseOnePos ||
+      data.tileNum + 20 == currentGameState[data.roomno].playerOneBaseOnePos ||
+      data.tileNum + 9 == currentGameState[data.roomno].playerOneBaseOnePos ||
+      data.tileNum - 1 == currentGameState[data.roomno].playerOneBaseOnePos ||
+      data.tileNum - 2 == currentGameState[data.roomno].playerOneBaseOnePos ||
+      data.tileNum - 11 == currentGameState[data.roomno].playerOneBaseOnePos) {
+    socket.emit('sonarOppFoundBaseOne', currentGameState[data.roomno].playerOneBaseOnePos);
+  }
+  if (data.tileNum - 10 == currentGameState[data.roomno].playerOneBaseTwoPos ||
+      data.tileNum - 20 == currentGameState[data.roomno].playerOneBaseTwoPos ||
+      data.tileNum - 9 == currentGameState[data.roomno].playerOneBaseTwoPos ||
+      data.tileNum + 1 == currentGameState[data.roomno].playerOneBaseTwoPos ||
+      data.tileNum + 2 == currentGameState[data.roomno].playerOneBaseTwoPos ||
+      data.tileNum + 11 == currentGameState[data.roomno].playerOneBaseTwoPos ||
+      data.tileNum + 10 == currentGameState[data.roomno].playerOneBaseTwoPos ||
+      data.tileNum + 20 == currentGameState[data.roomno].playerOneBaseTwoPos ||
+      data.tileNum + 9 == currentGameState[data.roomno].playerOneBaseTwoPos ||
+      data.tileNum - 1 == currentGameState[data.roomno].playerOneBaseTwoPos ||
+      data.tileNum - 2 == currentGameState[data.roomno].playerOneBaseTwoPos ||
+      data.tileNum - 11 == currentGameState[data.roomno].playerOneBaseTwoPos) {
+    socket.emit('sonarOppFoundBaseTwo', currentGameState[data.roomno].playerOneBaseTwoPos);
+  }
 
 }
 
@@ -341,4 +435,16 @@ function isEven(value) {
 function generateStartPos(){
     firstPlayerStartPos = randomInteger(0, 39);
     secondPlayerStartPos = randomInteger(50, 89);
+};
+
+function generateBasePos(){
+    firstPlayerBaseOnePos = randomInteger(0, 39);
+    firstPlayerBaseTwoPos = randomInteger(0, 39);
+    secondPlayerBaseOnePos = randomInteger(50, 89);
+    secondPlayerBaseTwoPos = randomInteger(50, 89);
+    if ((firstPlayerStartPos == firstPlayerBaseOnePos || firstPlayerStartPos == firstPlayerBaseTwoPos)
+     || (secondPlayerStartPos ==  secondPlayerBaseOnePos || secondPlayerStartPos == secondPlayerBaseTwoPos)) {
+      generateBasePos()
+    }
+
 };
