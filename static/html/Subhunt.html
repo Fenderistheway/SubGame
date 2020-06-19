@@ -33,6 +33,42 @@ li {
   color: green;
 }
 
+#title-image {
+  display: inline-block;
+  background-size: cover;
+  padding-left: 40vw;
+  margin-top: 10vw;
+  background-repeat: no-repeat;
+  background-image: url("/imgs/Title.PNG");
+  height: 32vw;
+  width: 7vw;
+
+}
+
+#login-screen {
+  display: inline-block;
+  text-align: center;
+  margin: auto;
+  margin-top: -2vw;
+  margin-left: -2vw;
+  width: 102vw;
+  height: 110vh;
+  background: rgb(44,62,80);
+  background: linear-gradient(139deg, rgba(44,62,80,1) 0%, rgba(0,0,0,1) 100%);
+}
+
+#waiting-screen {
+  display: inline-block;
+  text-align: center;
+  margin: auto;
+  margin-top: -2vw;
+  margin-left: -2vw;
+  width: 102vw;
+  height: 110vh;
+  background: rgb(44,62,80);
+  background: linear-gradient(139deg, rgba(44,62,80,1) 0%, rgba(0,0,0,1) 100%);
+}
+
 /* Pulse effect */
 @-webkit-keyframes pulse {
   0% {
@@ -320,6 +356,23 @@ width: 40vw;
 
 #start-game-button {
   display: none;
+  top: 0vw;
+  background-color:transparent;
+  border:2px solid #18ab29;
+  cursor:pointer;
+  color: green;
+  font: 1.3vw Inconsolata, monospace;
+  font-size:2vw;
+  padding:1vw 3.4vw 1vw 3.4vw;
+  width: 25vw;
+  margin: auto;
+  text-decoration:none;
+  text-align: center;
+}
+
+#start-game-button:hover {
+	background-color: #18ab29;
+  color: black;
 }
 
 .myButton {
@@ -358,6 +411,41 @@ width: 40vw;
 	padding:1vw 1vw;
   margin: 1vw;
 	text-decoration:none;
+}
+
+#usernameEntry {
+  display: inline;
+  position: relative;
+  top: 0vw;
+	background-color:transparent;
+	border:2px solid #18ab29;
+  width: 30vw;
+	color: green;
+  font: 1.3vw Inconsolata, monospace;
+	font-size:2vw;
+	padding:1vw 1vw;
+  margin: 1vw;
+	text-decoration:none;
+}
+
+#myNameButton {
+  display: inline;
+  position: relative;
+  top: 0vw;
+	background-color:transparent;
+	border:2px solid #18ab29;
+	cursor:pointer;
+	color: green;
+  font: 1.3vw Inconsolata, monospace;
+	font-size:2vw;
+	padding:1vw 3.4vw 1vw 3.4vw;
+  width: 15vw;
+	text-decoration:none;
+}
+
+#myNameButton:hover {
+	background-color: #18ab29;
+  color: black;
 }
 
 .mySendButton {
@@ -534,7 +622,6 @@ width: 40vw;
   			preload(
   				"/imgs/AnimatedSubRiseNew.GIF",
   				"/imgs/AnimatedSubSinkNew.GIF",
-  				"http://domain.tld/gallery/image-003.jpg",
           "/imgs/Boom.GIF",
           "/imgs/Commandlabel.PNG",
           "/imgs/Fire.PNG",
@@ -557,7 +644,10 @@ width: 40vw;
           "/imgs/Ammo.PNG",
           "/imgs/Chat%20box.PNG",
           "/imgs/Boomanimatednew.GIF",
-          "/imgs/Subshadow.GIF"
+          "/imgs/Subshadow.GIF",
+          "/imgs/Base.PNG",
+          "/imgs/Baseopp.PNG"
+
 
   			)
   		//--><!]]>
@@ -567,13 +657,14 @@ width: 40vw;
 
 
 <div id="login-screen">
-  <h1>Battle Subs (Alpha 1)</h1>
-  <h1>What's your name?!</h1>
+  <div id="title-image"></div>
+  <h1>Enter your name, captain!</h1>
   <input type="text" id="usernameEntry"></input>
-  <button type="button" onclick="activateWaitingScreen()">Submit</button>
+  <button type="button" id="myNameButton" onclick="activateWaitingScreen()">Submit</button>
 </div>
 
 <div id="waiting-screen">
+  <div id="title-image"></div>
   <h1 id="searchingForOp">Searching for opponent...</h1>
   <button type="button" onclick="startGame()" id="start-game-button">Start Mission</button>
 </div>
